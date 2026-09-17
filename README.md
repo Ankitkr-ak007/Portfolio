@@ -1,119 +1,193 @@
-# Ankit Kumar — Flagship Engineering & AI Portfolio
+# Ankit Kumar — Engineering × AI Portfolio
 
-> **"I build systems that think."**
+> **High-Throughput Systems, Multi-Agent Architectures & Immersive Deterministic Web Applications**
 
-A production-grade, award-winning personal portfolio website built for **Ankit Kumar** — B.Tech Student, Full-Stack Engineer, C++ & Rust Developer, AI Systems Infrastructure Enthusiast, and Google Gemini Student Ambassador 2026.
+[![CI Pipeline](https://github.com/Ankitkr-ak007/Portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/Ankitkr-ak007/Portfolio/actions/workflows/ci.yml)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19.x-61dafb?logo=react)](https://react.dev/)
+[![Three.js](https://img.shields.io/badge/Three.js-r186-black?logo=three.js)](https://threejs.org/)
+[![Vitest](https://img.shields.io/badge/Vitest-5.x-yellow?logo=vitest)](https://vitest.dev/)
+[![Playwright](https://img.shields.io/badge/Playwright-E2E-green?logo=playwright)](https://playwright.dev/)
+
+---
+
+## 🏛️ Executive Summary
+
+This repository houses the personal engineering portfolio and systems showcase for **Ankit Kumar** — B.Tech Student, Full-Stack Software Engineer, C++/Rust Developer, AI Systems Builder, and **Google Gemini Student Ambassador 2026**.
+
+Built strictly following the **Level-1000 Engineering Control Center** architectural specifications (Parts 1–18), the website embodies the philosophy:
+> *"10% Spectacle, 90% Precision: Architecture > Prompting, Validation > Blind Trust, Determinism > Accidental Behavior."*
+
+---
+
+## ⚡ Core Highlights & Signature "WOW" Moments
+
+1. **WOW 01: Systems Core (Hero 3D Visualizer)**
+   - Custom procedural Three.js / React Three Fiber scene with Fresnel interference shaders, dynamic orbit rings, signal packet emitters, and real-time GPU data particle streams.
+   - Built with single-canvas lifecycle management, controlled DPR scaling (`[1, 1.5]`), and automated WebGL crash boundary fallbacks.
+
+2. **WOW 02: Shared-Element Project Architecture Transitions**
+   - Vertical editorial archive featuring holographic SVG/CSS 3D preview cards.
+   - Fluid `layoutId` modal expansion into exhaustive **11-section deep architectural case studies** (`role`, `overview`, `problem`, `approach`, `system`, `architecture`, `decisions`, `technologies`, `challenges`, `outcomes`, `learnings`).
+
+3. **WOW 03: Architecture & Process Visualizer**
+   - Sticky scroll horizontal systems pipeline demonstrating deterministic software deployment (`THINK`, `BUILD`, `BREAK`, `VALIDATE`, `SHIP`).
+   - Interactive Sub-Agent Topology DAG with live packet dispatch and schema-repair observability.
+
+4. **Interactive AI Lab Sandboxes**
+   - **Agent Topology & Signal Flow**: Live SVG packet simulation.
+   - **Rust Borrow Checker Visualizer**: Interactive stack vs. heap borrowing & scope lifetime mechanics.
+   - **Procedural Canvas Stream**: 60fps trigonometric particle vector field.
+   - **Deterministic Schema Repair Loop**: Self-healing Zod validation demonstration.
+
+5. **Command Palette (`⌘K` / `Ctrl+K`) & Interactive Terminal (`~ zsh`)**
+   - Full keyboard-driven command dispatcher and UNIX CLI shell with command history, tab focus trapping, and zero background scroll leakage.
+
+6. **Overlay Scroll Isolation Architecture (`src/overlays/`)**
+   - Robust modal scroll isolation: suspensions of Lenis smooth scroll engine (`pauseLenis()`), locked body overflow with layout-shift compensation, strict `overscroll-behavior: contain`, and full keyboard navigation.
 
 ---
 
 ## 🛠️ Technology Stack
 
-- **Core**: React 19, TypeScript, Vite
-- **Styling**: Tailwind CSS v4, Custom CSS Design Tokens
-- **Animations**: Motion (`motion/react`), Lenis Smooth Scroll
-- **3D & Canvas**: Three.js, React Three Fiber (`@react-three/fiber`), `@react-three/drei`
-- **Icons**: Lucide React
-- **Utilities**: `clsx`, `tailwind-merge`, `zod`
+| Layer | Technologies |
+| :--- | :--- |
+| **Core Framework** | React 19, TypeScript, Vite 8 |
+| **Styling & Design** | Tailwind CSS v4, Custom Design Tokens, CSS Custom Properties |
+| **3D & Shaders** | Three.js (r186), React Three Fiber (v9), @react-three/drei, GLSL Shaders |
+| **Animation & Motion** | Motion (`motion/react` v13), Lenis Smooth Scroll Engine |
+| **Validation & State** | Zod (v4), Native React State Hooks, Strict Contract Types |
+| **Icons & Brand** | Lucide React, Verified Custom SVG Tech Vectors |
+| **Unit & Integration** | Vitest, React Testing Library, `@testing-library/jest-dom`, `jsdom` |
+| **End-to-End & Audits** | Playwright, `@axe-core/playwright` (WCAG AA), Lighthouse CI |
+| **CI / CD & Hosting** | GitHub Actions, Vercel SPA Hosting |
 
 ---
 
-## ⚡ Quick Start
+## 📂 Project Structure
 
-### 1. Install Dependencies
-```bash
-npm install --legacy-peer-deps
+```text
+src/
+├── 3d/                     # Modular Three.js & R3F systems
+│   ├── SystemsCore/        # Hero 3D Core, OrbitRings, SignalNodes, DataParticles
+│   ├── fallbacks/          # WebGLErrorBoundary, FallbackScene
+│   ├── materials/          # Shared PBR material palette
+│   ├── shaders/            # Custom GLSL shaders (fresnel, noise, signalFlow)
+│   └── utils/              # WebGL support detector and memory helpers
+├── components/
+│   ├── about/              # Bio, portrait module, distinction cards
+│   ├── contact/            # Direct inbox, mailto action, copy action, socials
+│   ├── engineering/        # HowIThink principles, TechConstellation graph, HorizontalProcess
+│   ├── experience/         # Factual career timeline, Google Ambassador milestones
+│   ├── hero/               # Hero headline, telemetry badges, CTA triggers
+│   ├── insight/            # Editorial philosophy & comparison tables
+│   ├── lab/                # Interactive sandboxes (Agent Graph, Rust, Canvas, Zod)
+│   ├── layout/             # Header, Footer, CustomCursor, Navigation
+│   ├── motion/             # ScrollProgress, Magnetic button wrapper
+│   ├── projects/           # SelectedWork archive, CaseStudyModal, ProjectCardVisual
+│   └── ui/                 # Preloader, CommandPalette, Terminal CLI, BrandIcons
+├── data/                   # Strictly typed, centralized data models
+│   ├── experience.ts       # Authentic career milestones
+│   ├── labExperiments.ts   # Lab sandboxes dataset
+│   ├── metadata.ts         # Author identity, links, and navigation
+│   ├── principles.ts       # Engineering principles & flows
+│   ├── projects.ts         # 11-section deep architectural case studies
+│   ├── skills.ts           # Interconnected tech nodes & graph edges
+│   └── thoughts.ts         # Technical articles and insights
+├── hooks/                  # Custom React hooks (useLenis, useCustomCursor)
+├── lib/                    # Lenis controller, class merger (cn), suppression utils
+├── motion/                 # Motion tokens, springs, bezier curves, reduced-motion hooks
+├── overlays/               # ModalShell, OverlayScrollArea, useScrollLock, useOverlayNavigation
+├── styles/                 # Design tokens (colors, typography, elevation, spacing)
+└── test/                   # Vitest setup, matchers, and DOM polyfills
 ```
 
-### 2. Start Development Server
+---
+
+## 🚀 Local Development Setup
+
+### Prerequisites
+- **Node.js**: `v20.x` or `v22.x` (Recommended: `v22.x`)
+- **npm**: `v10.x` or higher
+
+### 1. Clone & Install
+```bash
+git clone https://github.com/Ankitkr-ak007/Portfolio.git
+cd Portfolio
+npm ci
+```
+
+### 2. Run Local Development Server
 ```bash
 npm run dev
 ```
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ### 3. Build for Production
 ```bash
 npm run build
 ```
 
----
-
-## 🤖 AI Development & Project Intelligence
-
-This repository includes a persistent, self-updating **Cross-AI Project Intelligence System**.
-
-Before modifying any code in this repository with an AI model:
-
+### 4. Preview Production Build
 ```bash
-# Initialize AI session, sync context & validate schema
-npm run ai:start
-
-# Inspect project intelligence topics
-npm run ai:inspect architecture
-
-# Finalize AI session and record change log
-npm run ai:end
+npm run preview
 ```
-
-Read [`AGENTS.md`](file:///C:/Users/Ankit%20Kumar/Portfolio/AGENTS.md) and [`docs/ai/PROJECT_CONTEXT.md`](file:///C:/Users/Ankit%20Kumar/Portfolio/docs/ai/PROJECT_CONTEXT.md) for full identity and architectural rules.
+Open [http://localhost:4173](http://localhost:4173).
 
 ---
 
-## 📁 Architecture Overview
+## 🧪 Testing Suite Execution
 
-```text
-src/
-├── app/
-│   └── App.tsx              # Root application component
-├── components/
-│   ├── 3d/                  # Three.js 3D Systems Core & Fallbacks
-│   │   ├── SystemsCoreCanvas.tsx
-│   │   ├── SystemsCoreScene.tsx
-│   │   └── FallbackScene.tsx
-│   ├── hero/                # Hero section & conceptual telemetry
-│   ├── projects/            # Selected work cards & full-screen case study modals
-│   ├── engineering/         # Principles, interactive topology flow & constellation
-│   ├── experience/          # Vertical timeline with signal line
-│   ├── lab/                 # Interactive mini-experiments (DAG, Rust Memory, Canvas Wave)
-│   ├── insight/             # Editorial AI vs Engineering comparison & thesis banner
-│   ├── about/               # Biography, portrait placeholder & credibility layer
-│   ├── contact/             # Contact form & direct channels
-│   ├── layout/              # Header nav, Footer & Custom Cursor
-│   └── ui/                  # Preloader, Command Palette (Ctrl+K), Terminal shell, CodeWindow
-├── data/
-│   ├── projects.ts          # Project dataset & case study details
-│   ├── experience.ts        # Experience & Ambassador journey data
-│   ├── skills.ts            # Technical constellation nodes
-│   └── labExperiments.ts    # Interactive lab experiments
-├── hooks/
-│   ├── useLenis.ts          # Smooth scrolling hook
-│   └── useCustomCursor.ts   # Magnetic custom cursor hook
-├── styles/
-│   └── globals.css          # Design tokens, theme colors & custom keyframe animations
-└── main.tsx
+### 1. Static Analysis & Type Verification
+```bash
+npm run lint         # Runs oxlint (0 errors, 0 warnings)
+npm run typecheck    # Runs tsc --noEmit strict type checking
+```
+
+### 2. Unit & Integration Tests (Vitest)
+```bash
+npm run test:unit    # Runs 25 in-memory unit tests (100% green in ~2.5s)
+npm run test:coverage # Generates V8 code coverage report
+```
+
+### 3. End-to-End Tests (Playwright)
+```bash
+# Ensure browsers are installed
+npx playwright install chromium
+
+# Run all 16 E2E tests against production preview
+npm run test:e2e
+
+# Run with interactive UI mode
+npx playwright test --ui
+```
+
+### 4. Lighthouse Quality Audit
+```bash
+npm run test:lighthouse
 ```
 
 ---
 
-## 📝 How to Update Portfolio Content
+## 📜 Documentation Index
 
-All content is data-driven and stored in clean TypeScript files under `src/data/`:
-
-1. **Projects & Case Studies**: Modify `src/data/projects.ts` to add or update projects, technologies, and detailed problem/solution breakdowns.
-2. **Experience & Milestones**: Update `src/data/experience.ts` to edit roles, Google Gemini Ambassador details, and achievements.
-3. **Skills Constellation**: Edit `src/data/skills.ts` to add skill nodes, categories, and connection relationships.
-4. **Lab Experiments**: Modify `src/data/labExperiments.ts` to adjust experiment descriptions or titles.
-
----
-
-## 💡 Keyboard Shortcuts & Features
-
-- **`Ctrl + K` or `⌘ + K`**: Opens developer Command Palette.
-- **Interactive Terminal**: Click "Open Terminal" or run command in palette to trigger the CLI shell. (Try typing `sudo`!).
-- **Custom Cursor**: Desktop spring physics cursor with hover labels (`VIEW PROJECT`, `EXPLORE`, `GITHUB`). Automatically fallback on touch devices.
-- **WebGL Fallback**: Graceful CSS 3D fallback if WebGL fails or is unsupported.
-- **Preloader**: 1.5s intro sequence; remembers `sessionStorage` so repeat visits skip the preloader.
+- [🏛️ System Architecture Deep-Dive](docs/ARCHITECTURE.md)
+- [🎨 Design System & Token Specifications](docs/DESIGN_SYSTEM.md)
+- [🧪 Testing Architecture & Verification Protocols](docs/TESTING.md)
+- [🚀 Deployment & Production Infrastructure](docs/DEPLOYMENT.md)
+- [🛡️ Final Quality & Compliance Report](docs/QUALITY_REPORT.md)
+- [📦 Asset Provenance & License Log](docs/ai/ASSET_SOURCES.md)
 
 ---
 
-## 📄 License
+## 📬 Contact & Channels
 
-Created for Ankit Kumar © 2026. All rights reserved.
+- **Email**: [ankit.kr.dev@gmail.com](mailto:ankit.kr.dev@gmail.com)
+- **GitHub**: [github.com/Ankitkr-ak007](https://github.com/Ankitkr-ak007)
+- **LinkedIn**: [linkedin.com/in/ankit-kumar-dev](https://www.linkedin.com/in/ankit-kumar-dev)
+
+---
+
+## ⚖️ License
+
+MIT License © 2026 Ankit Kumar. Built with precision and care.
