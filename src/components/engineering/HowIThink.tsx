@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'motion/react';
 import { Cpu, ShieldCheck, Layers } from 'lucide-react';
 import { InteractiveDiagram } from './InteractiveDiagram';
 import { TechConstellation } from './TechConstellation';

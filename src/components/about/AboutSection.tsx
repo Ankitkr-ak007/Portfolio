@@ -1,6 +1,6 @@
 import React from 'react';
 import { PortraitModule } from './PortraitModule';
-import { Sparkles, Terminal, Code2, BookOpen } from 'lucide-react';
+import { Sparkles, Terminal, Code2 } from 'lucide-react';
 
 export const AboutSection: React.FC = () => {
   return (

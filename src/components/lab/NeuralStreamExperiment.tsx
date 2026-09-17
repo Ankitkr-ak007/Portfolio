@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Sliders } from 'lucide-react';
 
 export const NeuralStreamExperiment: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -80,6 +79,7 @@ export const NeuralStreamExperiment: React.FC = () => {
             max="0.05"
             step="0.001"
             value={frequency}
+            aria-label="Wave frequency slider"
             onChange={(e) => setFrequency(parseFloat(e.target.value))}
             className="w-full accent-[#78AFFF]"
           />
@@ -96,6 +96,7 @@ export const NeuralStreamExperiment: React.FC = () => {
             max="0.1"
             step="0.005"
             value={speed}
+            aria-label="Flow velocity slider"
             onChange={(e) => setSpeed(parseFloat(e.target.value))}
             className="w-full accent-[#B7D7FF]"
           />

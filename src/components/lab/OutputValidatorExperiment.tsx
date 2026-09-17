@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, RefreshCw, CheckCircle2 } from 'lucide-react';
+import { RefreshCw, CheckCircle2 } from 'lucide-react';
 
 export const OutputValidatorExperiment: React.FC = () => {
   const [status, setStatus] = useState<'idle' | 'parsing' | 'invalid' | 'repaired'>('idle');

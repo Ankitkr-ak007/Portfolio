@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import { useLenis } from './hooks/useLenis';
 import { useCustomCursor } from './hooks/useCustomCursor';
 import { Preloader } from './components/ui/Preloader';
@@ -10,17 +10,18 @@ import { EditorialIntro } from './components/ui/EditorialIntro';
 import { SelectedWork } from './components/projects/SelectedWork';
 import { HowIThink } from './components/engineering/HowIThink';
 import { ExperienceTimeline } from './components/experience/ExperienceTimeline';
-import { LabSection } from './components/lab/LabSection';
-import { AiVsEngineering } from './components/insight/AiVsEngineering';
-import { AiPhilosophyBanner } from './components/insight/AiPhilosophyBanner';
 import { AboutSection } from './components/about/AboutSection';
 import { ContactSection } from './components/contact/ContactSection';
 import { Footer } from './components/layout/Footer';
-import { CommandPalette } from './components/ui/CommandPalette';
-import { Terminal } from './components/ui/Terminal';
+
+// Lazy loaded components for optimized chunk loading
+const LabSection = lazy(() => import('./components/lab/LabSection').then((m) => ({ default: m.LabSection })));
+const AiVsEngineering = lazy(() => import('./components/insight/AiVsEngineering').then((m) => ({ default: m.AiVsEngineering })));
+const AiPhilosophyBanner = lazy(() => import('./components/insight/AiPhilosophyBanner').then((m) => ({ default: m.AiPhilosophyBanner })));
+const CommandPalette = lazy(() => import('./components/ui/CommandPalette').then((m) => ({ default: m.CommandPalette })));
+const Terminal = lazy(() => import('./components/ui/Terminal').then((m) => ({ default: m.Terminal })));
 
 export function App() {
-  const [preloaderComplete, setPreloaderComplete] = useState(false);
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [terminalOpen, setTerminalOpen] = useState(false);
 
@@ -33,13 +34,13 @@ export function App() {
   return (
     <div className="relative min-h-screen bg-[#050609] text-[#F5F7FA] font-sans selection:bg-[#78AFFF] selection:text-[#050609]">
       {/* Preloader opening sequence */}
-      <Preloader onComplete={() => setPreloaderComplete(true)} />
+      <Preloader onComplete={() => {}} />
 
       {/* Custom Desktop Cursor */}
       <CustomCursor cursorState={cursor} />
 
       {/* Global Grain Texture & Background Grid */}
-      <div className="fixed inset-0 bg-grain opacity-30 pointer-events-none z-[1]" />
+      <div className="fixed inset-0 bg-grain opacity-30 pointer-events-none z-[1]" aria-hidden="true" />
 
       {/* Header Navigation */}
       <Header
@@ -59,9 +60,14 @@ export function App() {
         <SelectedWork onCursorHover={setCursorHover} />
         <HowIThink />
         <ExperienceTimeline />
-        <LabSection />
-        <AiVsEngineering />
-        <AiPhilosophyBanner />
+
+        {/* Lazy Loaded Below-The-Fold Sections */}
+        <Suspense fallback={<div className="py-20 text-center font-mono text-xs text-[#596170]">LOADING LAB...</div>}>
+          <LabSection />
+          <AiVsEngineering />
+          <AiPhilosophyBanner />
+        </Suspense>
+
         <AboutSection />
         <ContactSection onCursorHover={setCursorHover} />
       </main>
@@ -70,17 +76,21 @@ export function App() {
       <Footer onCursorHover={setCursorHover} />
 
       {/* Command Palette (Ctrl+K) */}
-      <CommandPalette
-        isOpen={commandPaletteOpen}
-        onClose={() => setCommandPaletteOpen(false)}
-        onOpenTerminal={() => setTerminalOpen(true)}
-      />
+      <Suspense fallback={null}>
+        <CommandPalette
+          isOpen={commandPaletteOpen}
+          onClose={() => setCommandPaletteOpen(false)}
+          onOpenTerminal={() => setTerminalOpen(true)}
+        />
+      </Suspense>
 
       {/* Terminal Shell */}
-      <Terminal
-        isOpen={terminalOpen}
-        onClose={() => setTerminalOpen(false)}
-      />
+      <Suspense fallback={null}>
+        <Terminal
+          isOpen={terminalOpen}
+          onClose={() => setTerminalOpen(false)}
+        />
+      </Suspense>
     </div>
   );
 }

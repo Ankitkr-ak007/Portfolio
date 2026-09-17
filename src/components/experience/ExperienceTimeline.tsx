@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'motion/react';
 import { Sparkles, Building2, GraduationCap, CheckCircle } from 'lucide-react';
 import { EXPERIENCE } from '../../data/experience';
-import type { ExperienceItem } from '../../data/experience';
 
 export const ExperienceTimeline: React.FC = () => {
-  const [expandedId, setExpandedId] = useState<string | null>('gemini-ambassador');
-
   const getIcon = (id: string) => {
     if (id === 'gemini-ambassador') return <Sparkles className="w-5 h-5 text-[#78AFFF]" />;
     if (id === 'kalki-vision') return <Building2 className="w-5 h-5 text-[#B7D7FF]" />;

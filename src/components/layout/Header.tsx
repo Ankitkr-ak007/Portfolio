@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X, Command, ArrowUpRight } from 'lucide-react';
+import { Menu, X, Command, ArrowUpRight, Terminal } from 'lucide-react';
 
 interface HeaderProps {
   onOpenCommandPalette: () => void;
@@ -38,7 +38,7 @@ export const Header: React.FC<HeaderProps> = ({
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -62,7 +62,7 @@ export const Header: React.FC<HeaderProps> = ({
     <header
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         isScrolled
-          ? 'py-3 bg-[rgba(5,6,9,0.85)] backdrop-blur-md border-b border-[rgba(255,255,255,0.08)] shadow-[0_4px_30px_rgba(0,0,0,0.5)]'
+          ? 'py-3 bg-[rgba(5,6,9,0.88)] backdrop-blur-md border-b border-[rgba(255,255,255,0.08)] shadow-[0_4px_30px_rgba(0,0,0,0.5)]'
           : 'py-6 bg-transparent'
       }`}
     >
@@ -118,13 +118,26 @@ export const Header: React.FC<HeaderProps> = ({
           })}
         </nav>
 
-        {/* Actions (Cmd+K + Contact CTA) */}
-        <div className="hidden md:flex items-center space-x-4">
+        {/* Actions (Cmd+K, Terminal, Contact CTA) */}
+        <div className="hidden md:flex items-center space-x-3">
+          {/* Terminal Quick Trigger */}
+          <button
+            onClick={onOpenTerminal}
+            onMouseEnter={() => onCursorHover(true, 'CLI', 'button')}
+            onMouseLeave={() => onCursorHover(false)}
+            aria-label="Open Interactive CLI Terminal"
+            className="p-2 rounded-lg bg-[rgba(16,20,27,0.7)] border border-[rgba(255,255,255,0.08)] hover:border-[#78AFFF] text-[#9BA4B2] hover:text-[#78AFFF] transition-all"
+            title="Open Interactive Terminal"
+          >
+            <Terminal className="w-3.5 h-3.5" />
+          </button>
+
           {/* Cmd+K Palette Trigger */}
           <button
             onClick={onOpenCommandPalette}
             onMouseEnter={() => onCursorHover(true, 'PALETTE', 'button')}
             onMouseLeave={() => onCursorHover(false)}
+            aria-label="Open Command Palette"
             className="flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-[rgba(16,20,27,0.7)] border border-[rgba(255,255,255,0.08)] hover:border-[#78AFFF] text-xs font-mono text-[#9BA4B2] hover:text-[#F5F7FA] transition-all"
             title="Open Command Palette (Ctrl+K)"
           >
@@ -151,6 +164,8 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? 'Close mobile navigation menu' : 'Open mobile navigation menu'}
+          aria-expanded={mobileMenuOpen}
           className="md:hidden p-2 rounded-lg bg-[#10141B] border border-[rgba(255,255,255,0.08)] text-[#F5F7FA]"
         >
           {mobileMenuOpen ? <X className="w-5 h-5 text-[#78AFFF]" /> : <Menu className="w-5 h-5 text-[#F5F7FA]" />}
@@ -183,11 +198,25 @@ export const Header: React.FC<HeaderProps> = ({
             </nav>
             <div className="pt-4 border-t border-[rgba(255,255,255,0.08)] flex items-center justify-between">
               <button
-                onClick={onOpenCommandPalette}
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenCommandPalette();
+                }}
                 className="flex items-center space-x-2 font-mono text-xs text-[#9BA4B2]"
               >
                 <Command className="w-4 h-4 text-[#78AFFF]" />
                 <span>COMMAND PALETTE (CTRL+K)</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenTerminal();
+                }}
+                className="flex items-center space-x-2 font-mono text-xs text-[#78AFFF]"
+              >
+                <Terminal className="w-4 h-4" />
+                <span>TERMINAL</span>
               </button>
             </div>
           </motion.div>

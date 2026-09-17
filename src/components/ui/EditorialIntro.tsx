@@ -1,8 +1,28 @@
-import React from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform, MotionValue } from 'motion/react';
+
+interface WordSpanProps {
+  word: string;
+  progress: MotionValue<number>;
+  index: number;
+  total: number;
+}
+
+const WordSpan: React.FC<WordSpanProps> = ({ word, progress, index, total }) => {
+  const start = index / total;
+  const end = start + 1 / total;
+  const opacity = useTransform(progress, [start, end], [0.25, 1]);
+  const color = useTransform(progress, [start, end], ['#596170', '#F5F7FA']);
+
+  return (
+    <motion.span style={{ opacity, color }} className="transition-colors duration-200">
+      {word}
+    </motion.span>
+  );
+};
 
 export const EditorialIntro: React.FC = () => {
-  const containerRef = React.useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -21,23 +41,15 @@ export const EditorialIntro: React.FC = () => {
         </div>
 
         <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-snug flex flex-wrap gap-x-3 gap-y-2">
-          {words.map((word, i) => {
-            const start = i / words.length;
-            const end = start + 1 / words.length;
-            // Word opacity interpolation
-            const opacity = useTransform(scrollYProgress, [start, end], [0.25, 1]);
-            const color = useTransform(scrollYProgress, [start, end], ['#596170', '#F5F7FA']);
-
-            return (
-              <motion.span
-                key={i}
-                style={{ opacity, color }}
-                className="transition-colors duration-200"
-              >
-                {word}
-              </motion.span>
-            );
-          })}
+          {words.map((word, i) => (
+            <WordSpan
+              key={i}
+              word={word}
+              progress={scrollYProgress}
+              index={i}
+              total={words.length}
+            />
+          ))}
         </h2>
       </div>
     </section>

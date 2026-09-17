@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, ExternalLink, Cpu, ShieldCheck, Layers, CheckCircle2 } from 'lucide-react';
 import type { Project } from '../../data/projects';
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 
 interface CaseStudyModalProps {
   project: Project | null;
@@ -14,13 +15,15 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
   onClose,
   onCursorHover,
 }) => {
+  useBodyScrollLock(!!project);
+
   if (!project || !project.caseStudy) return null;
 
   const { problem, approach, architecture, challenges, outcome } = project.caseStudy;
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 lg:p-10 overflow-y-auto">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 lg:p-10 overflow-y-auto" role="dialog" aria-modal="true" aria-label={project.title}>
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -49,6 +52,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
 
             <button
               onClick={onClose}
+              aria-label="Close case study"
               onMouseEnter={() => onCursorHover(true, 'CLOSE', 'button')}
               onMouseLeave={() => onCursorHover(false)}
               className="p-2 rounded-lg bg-[#10141B] border border-[rgba(255,255,255,0.1)] text-[#9BA4B2] hover:text-[#F5F7FA] hover:border-[#78AFFF] transition-all"
@@ -142,7 +146,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
               <a
                 href={project.githubUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 onMouseEnter={() => onCursorHover(true, 'GITHUB', 'button')}
                 onMouseLeave={() => onCursorHover(false)}
                 className="flex items-center space-x-2 px-5 py-2.5 rounded-lg bg-[#10141B] border border-[rgba(255,255,255,0.1)] hover:border-[#78AFFF] text-xs font-mono text-[#F5F7FA] transition-all"

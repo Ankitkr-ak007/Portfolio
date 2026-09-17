@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, Command, ArrowRight, Terminal, Layers, Sparkles, X } from 'lucide-react';
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -15,14 +16,15 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 }) => {
   const [query, setQuery] = useState('');
 
+  // Lock body scroll when open
+  useBodyScrollLock(isOpen);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         if (isOpen) onClose();
-        else {
-          setQuery('');
-        }
+        else setQuery('');
       }
       if (e.key === 'Escape' && isOpen) {
         onClose();
@@ -43,7 +45,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     { label: 'Go to About Me', action: () => scrollTo('#about'), icon: <Search className="w-4 h-4 text-[#9BA4B2]" /> },
     { label: 'Go to Contact', action: () => scrollTo('#contact'), icon: <ArrowRight className="w-4 h-4 text-emerald-400" /> },
     { label: 'Open Interactive Terminal', action: () => { onClose(); onOpenTerminal(); }, icon: <Terminal className="w-4 h-4 text-[#78AFFF]" /> },
-    { label: 'Open GitHub Repository', action: () => window.open('https://github.com/Ankitkr-ak007', '_blank'), icon: (
+    { label: 'Open GitHub Repository', action: () => window.open('https://github.com/Ankitkr-ak007', '_blank', 'noopener,noreferrer'), icon: (
       <svg className="w-4 h-4 fill-current text-[#F5F7FA]" viewBox="0 0 24 24">
         <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
       </svg>
@@ -62,7 +64,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4">
+      <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4" role="dialog" aria-modal="true" aria-label="Command Palette">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -85,12 +87,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             <input
               type="text"
               autoFocus
+              aria-label="Search command palette"
               placeholder="Type a command or search..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="w-full py-4 bg-transparent text-sm text-[#F5F7FA] placeholder-[#596170] focus:outline-none"
             />
-            <button onClick={onClose} className="p-1 text-[#596170] hover:text-[#F5F7FA]">
+            <button onClick={onClose} aria-label="Close command palette" className="p-1 text-[#596170] hover:text-[#F5F7FA]">
               <X className="w-4 h-4" />
             </button>
           </div>

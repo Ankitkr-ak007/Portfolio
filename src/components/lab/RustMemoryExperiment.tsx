@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, AlertTriangle, ArrowRight } from 'lucide-react';
+import { ShieldCheck, AlertTriangle } from 'lucide-react';
 
 export const RustMemoryExperiment: React.FC = () => {
   const [borrowState, setBorrowState] = useState<'immutable' | 'mutable' | 'conflict'>('immutable');

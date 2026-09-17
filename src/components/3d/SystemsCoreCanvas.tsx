@@ -28,19 +28,21 @@ class WebGLErrorBoundary extends React.Component<
   }
 }
 
+function checkWebGL(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    const canvas = document.createElement('canvas');
+    return !!(canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
+  } catch {
+    return false;
+  }
+}
+
 export const SystemsCoreCanvas: React.FC = () => {
-  const [webglSupported, setWebglSupported] = useState<boolean | null>(null);
+  const [webglSupported] = useState<boolean>(checkWebGL);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    try {
-      const canvas = document.createElement('canvas');
-      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-      setWebglSupported(!!gl);
-    } catch (e) {
-      setWebglSupported(false);
-    }
-
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({
         x: (e.clientX / window.innerWidth) * 2 - 1,
@@ -48,11 +50,11 @@ export const SystemsCoreCanvas: React.FC = () => {
       });
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  if (webglSupported === false) {
+  if (!webglSupported) {
     return <FallbackScene />;
   }
 

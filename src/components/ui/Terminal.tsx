@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Terminal as TerminalIcon, CornerDownLeft } from 'lucide-react';
+import { X, Terminal as TerminalIcon } from 'lucide-react';
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 
 interface TerminalProps {
   isOpen: boolean;
@@ -17,6 +18,8 @@ export const Terminal: React.FC<TerminalProps> = ({ isOpen, onClose }) => {
   const [history, setHistory] = useState<CommandHistory[]>([
     { cmd: 'help', output: 'Available commands: whoami, stack, work, lab, contact, sudo, clear, exit' }
   ]);
+
+  useBodyScrollLock(isOpen);
 
   if (!isOpen) return null;
 
@@ -66,7 +69,7 @@ export const Terminal: React.FC<TerminalProps> = ({ isOpen, onClose }) => {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Interactive Terminal">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -89,7 +92,7 @@ export const Terminal: React.FC<TerminalProps> = ({ isOpen, onClose }) => {
               <TerminalIcon className="w-4 h-4" />
               <span>ankit@kalki-core:~ (zsh)</span>
             </div>
-            <button onClick={onClose} className="p-1 text-[#596170] hover:text-[#F5F7FA]">
+            <button onClick={onClose} aria-label="Close terminal" className="p-1 text-[#596170] hover:text-[#F5F7FA]">
               <X className="w-4 h-4" />
             </button>
           </div>
@@ -117,6 +120,7 @@ export const Terminal: React.FC<TerminalProps> = ({ isOpen, onClose }) => {
               <input
                 type="text"
                 autoFocus
+                aria-label="Terminal command input"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 className="w-full bg-transparent text-xs text-[#F5F7FA] focus:outline-none"

@@ -7,13 +7,13 @@ interface PreloaderProps {
 
 export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    return !sessionStorage.getItem('ak_portfolio_intro_seen');
+  });
 
   useEffect(() => {
-    // Check if user already saw intro during session
-    const hasSeenIntro = sessionStorage.getItem('ak_portfolio_intro_seen');
-    if (hasSeenIntro) {
-      setIsVisible(false);
+    if (!isVisible) {
       onComplete();
       return;
     }
@@ -26,15 +26,15 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
             setIsVisible(false);
             sessionStorage.setItem('ak_portfolio_intro_seen', 'true');
             onComplete();
-          }, 400);
+          }, 350);
           return 100;
         }
         return prev + 5;
       });
-    }, 40);
+    }, 35);
 
     return () => clearInterval(interval);
-  }, [onComplete]);
+  }, [isVisible, onComplete]);
 
   return (
     <AnimatePresence>

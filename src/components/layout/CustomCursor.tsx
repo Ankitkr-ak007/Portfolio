@@ -1,60 +1,76 @@
 import React, { useEffect, useState } from 'react';
 import { motion, useSpring, useMotionValue } from 'motion/react';
+import type { CursorState } from '../../hooks/useCustomCursor';
 
 interface CustomCursorProps {
-  cursorState: {
-    x: number;
-    y: number;
-    isHovered: boolean;
-    label: string;
-    variant: 'default' | 'project' | 'button' | 'link' | 'hidden';
-  };
+  cursorState: CursorState;
 }
 
 export const CustomCursor: React.FC<CustomCursorProps> = ({ cursorState }) => {
+  const [isVisible, setIsVisible] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
-  // Smooth springs for outer ring
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
+  // High performance motion values
+  const rawX = useMotionValue(-100);
+  const rawY = useMotionValue(-100);
 
-  const springConfig = { damping: 25, stiffness: 250 };
-  const smoothX = useSpring(cursorX, springConfig);
-  const smoothY = useSpring(cursorY, springConfig);
+  const springConfig = { damping: 28, stiffness: 320, mass: 0.5 };
+  const smoothX = useSpring(rawX, springConfig);
+  const smoothY = useSpring(rawY, springConfig);
 
   useEffect(() => {
-    // Detect touch screens
-    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+    // Media query checks for touch or reduced motion
+    const touchMedia = window.matchMedia('(pointer: coarse)');
+    const motionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    if (touchMedia.matches || motionMedia.matches) {
       setIsTouchDevice(true);
+      return;
     }
-  }, []);
 
-  useEffect(() => {
-    cursorX.set(cursorState.x);
-    cursorY.set(cursorState.y);
-  }, [cursorState.x, cursorState.y, cursorX, cursorY]);
+    const handleMouseMove = (e: MouseEvent) => {
+      rawX.set(e.clientX);
+      rawY.set(e.clientY);
+      if (!isVisible) setIsVisible(true);
+    };
 
-  if (isTouchDevice || cursorState.variant === 'hidden') return null;
+    const handleMouseLeave = () => setIsVisible(false);
+    const handleMouseEnter = () => setIsVisible(true);
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    document.body.addEventListener('mouseleave', handleMouseLeave);
+    document.body.addEventListener('mouseenter', handleMouseEnter);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      document.body.removeEventListener('mouseleave', handleMouseLeave);
+      document.body.removeEventListener('mouseenter', handleMouseEnter);
+    };
+  }, [rawX, rawY, isVisible]);
+
+  if (isTouchDevice || cursorState.variant === 'hidden' || !isVisible) return null;
 
   const isProject = cursorState.variant === 'project';
   const isButton = cursorState.variant === 'button';
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden">
-      {/* Primary Dot */}
-      <div
-        className="fixed left-0 top-0 h-2 w-2 rounded-full bg-[#78AFFF] transition-opacity duration-300 shadow-[0_0_10px_#78AFFF]"
+    <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden" aria-hidden="true">
+      {/* Primary Glowing Dot (Instant transform) */}
+      <motion.div
+        className="fixed left-0 top-0 h-2 w-2 rounded-full bg-[#78AFFF] shadow-[0_0_10px_#78AFFF]"
         style={{
-          transform: `translate3d(${cursorState.x - 4}px, ${cursorState.y - 4}px, 0)`,
-          opacity: cursorState.x < 0 ? 0 : 1,
+          x: rawX,
+          y: rawY,
+          translateX: '-50%',
+          translateY: '-50%',
         }}
       />
 
-      {/* Outer Ring / Label Bubble */}
+      {/* Outer Ring / Interactive Label Bubble (Spring physics) */}
       <motion.div
         className={`fixed left-0 top-0 flex items-center justify-center rounded-full border border-[rgba(120,175,255,0.4)] backdrop-blur-[2px] transition-all duration-200 ${
           isProject
-            ? 'h-24 w-24 bg-[rgba(10,13,18,0.85)] border-[#78AFFF] shadow-[0_0_20px_rgba(120,175,255,0.3)]'
+            ? 'h-24 w-24 bg-[rgba(10,13,18,0.88)] border-[#78AFFF] shadow-[0_0_25px_rgba(120,175,255,0.35)]'
             : isButton
             ? 'h-14 w-14 bg-[rgba(120,175,255,0.15)] border-[#78AFFF]'
             : cursorState.isHovered
@@ -64,13 +80,12 @@ export const CustomCursor: React.FC<CustomCursorProps> = ({ cursorState }) => {
         style={{
           x: smoothX,
           y: smoothY,
-          translateX: isProject ? '-50%' : isButton ? '-50%' : cursorState.isHovered ? '-50%' : '-50%',
-          translateY: isProject ? '-50%' : isButton ? '-50%' : cursorState.isHovered ? '-50%' : '-50%',
-          opacity: cursorState.x < 0 ? 0 : 1,
+          translateX: '-50%',
+          translateY: '-50%',
         }}
       >
         {cursorState.label && (
-          <span className="text-[10px] font-mono tracking-wider font-semibold text-[#B7D7FF] uppercase px-2 text-center">
+          <span className="text-[10px] font-mono tracking-wider font-bold text-[#B7D7FF] uppercase px-2 text-center select-none">
             {cursorState.label}
           </span>
         )}

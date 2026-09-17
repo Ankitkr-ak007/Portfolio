@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Play, RotateCcw, CheckCircle2, Cpu, ArrowRight } from 'lucide-react';
+import { Play, RotateCcw, CheckCircle2, Cpu } from 'lucide-react';
 
 export const AgentGraphExperiment: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(-1);
