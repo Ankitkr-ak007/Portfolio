@@ -2,7 +2,6 @@ import path from 'path';
 import {
   execGit,
   writeJson,
-  readJson,
   writeMarkdown,
   getHeadCommit,
   getShortHead,

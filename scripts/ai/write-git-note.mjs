@@ -17,7 +17,7 @@ export function writeGitNote(commitSha = 'HEAD', overrides = {}) {
     return null;
   }
 
-  const [fullSha, sSha, parentsRaw, author, authorEmail, committer, date, subject, body] = rawInfo.split('|');
+  const [, , parentsRaw, author, authorEmail, committer, date, subject, body] = rawInfo.split('|');
   const parents = parentsRaw ? parentsRaw.trim().split(' ').filter(Boolean) : [];
 
   // Parse diff stats & status
@@ -118,7 +118,6 @@ export function writeGitNote(commitSha = 'HEAD', overrides = {}) {
   };
 
   const sanitized = sanitizeSecrets(noteData);
-  const jsonString = JSON.stringify(sanitized, null, 2);
 
   // Write note to refs/notes/ai-context
   try {

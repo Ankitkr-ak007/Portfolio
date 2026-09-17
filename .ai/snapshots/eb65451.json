@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "commit": {
+    "sha": "eb65451acad3de1b971be282839ed0b513b57bdd",
+    "shortSha": "eb65451",
+    "parents": [
+      "11891cec0c7ead3d1c170eb9979bc4a76019cef1"
+    ],
+    "author": "[REDACTED]",
+    "authorEmail": "[REDACTED]",
+    "committer": "Ankit Kumar",
+    "date": "2026-09-17 22:06:19 +0530",
+    "subject": "feat(ai): implement event-driven Git hook memory and project intelligence system",
+    "body": ""
+  },
+  "repository": {
+    "branch": "main",
+    "status": "CLEAN"
+  },
+  "change": {
+    "classification": "FEATURE",
+    "classificationSource": "message",
+    "filesChanged": [
+      ".ai/snapshots/11891ce.json",
+      ".githooks/post-checkout",
+      ".githooks/post-commit",
+      ".githooks/post-merge",
+      ".githooks/pre-commit",
+      ".githooks/pre-push",
+      ".gitignore",
+      "AGENTS.md",
+      "README.md",
+      "docs/ai/AI_GAP_REPORT.md",
+      "docs/ai/GIT_HISTORY.md",
+      "docs/ai/PROJECT_STATE.md",
+      "package.json",
+      "scripts/ai/analyze-staged.mjs",
+      "scripts/ai/diff.mjs",
+      "scripts/ai/git-event.mjs",
+      "scripts/ai/health.mjs",
+      "scripts/ai/history.mjs",
+      "scripts/ai/hooks-status.mjs",
+      "scripts/ai/install-hooks.mjs",
+      "scripts/ai/notes-fetch.mjs",
+      "scripts/ai/notes-push.mjs",
+      "scripts/ai/read-git-note.mjs",
+      "scripts/ai/rebuild-history.mjs",
+      "scripts/ai/rebuild.mjs",
+      "scripts/ai/record.mjs",
+      "scripts/ai/repair.mjs",
+      "scripts/ai/session-start.mjs",
+      "scripts/ai/state.mjs",
+      "scripts/ai/utils.mjs",
+      "scripts/ai/write-git-note.mjs"
+    ],
+    "filesAdded": [
+      ".ai/snapshots/11891ce.json",
+      ".githooks/post-checkout",
+      ".githooks/post-commit",
+      ".githooks/post-merge",
+      ".githooks/pre-commit",
+      ".githooks/pre-push",
+      "scripts/ai/analyze-staged.mjs",
+      "scripts/ai/diff.mjs",
+      "scripts/ai/git-event.mjs",
+      "scripts/ai/health.mjs",
+      "scripts/ai/hooks-status.mjs",
+      "scripts/ai/install-hooks.mjs",
+      "scripts/ai/notes-fetch.mjs",
+      "scripts/ai/notes-push.mjs",
+      "scripts/ai/read-git-note.mjs",
+      "scripts/ai/rebuild-history.mjs",
+      "scripts/ai/rebuild.mjs",
+      "scripts/ai/record.mjs",
+      "scripts/ai/repair.mjs",
+      "scripts/ai/state.mjs",
+      "scripts/ai/write-git-note.mjs"
+    ],
+    "filesDeleted": [],
+    "filesRenamed": [],
+    "insertions": 1548,
+    "deletions": 111
+  },
+  "impact": {
+    "routes": [],
+    "components": [],
+    "3d": [],
+    "motion": [],
+    "design": [],
+    "performance": [],
+    "accessibility": [],
+    "testing": []
+  },
+  "context": {
+    "contextSchemaVersion": "1.0.0",
+    "projectContextHash": "5556ec384f382e2c21b258ae303008e93fc319fdbddc2839bc0ce78200bf641f",
+    "architectureHash": "7c45c95ab8a87358fe3af6be2c1ee2b4cc4a109ebb87470d69954f1fbddd452a",
+    "designSystemHash": "cbda3d29db2d10bd34ef9a98763190b694a374eabe582c0100e6bb07462c1d4d",
+    "stateHash": "277314a970a17dab5dbff139eedeacd7028d3719661d1005775a4397766de3db"
+  },
+  "ai": {
+    "sessionId": null,
+    "tool": "Antigravity",
+    "model": "Gemini Pro 2.5"
+  },
+  "validation": {
+    "lint": null,
+    "typecheck": null,
+    "build": null,
+    "tests": null
+  }
+}

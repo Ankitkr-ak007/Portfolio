@@ -1,8 +1,5 @@
-import path from 'path';
-import { execGit, writeJson } from './utils.mjs';
+import { execGit } from './utils.mjs';
 import { readGitNote } from './read-git-note.mjs';
-
-const ROOT_DIR = process.cwd();
 
 export function showCommitHistory(targetSha) {
   let commitArg = targetSha;
@@ -26,7 +23,6 @@ export function showCommitHistory(targetSha) {
     return;
   }
 
-  const shortSha = sha.substring(0, 7);
   const commitLog = execGit(`log -1 --pretty=format:"%H|%h|%P|%an|%ad|%s" --date=iso ${sha}`, { fallback: '' });
   if (!commitLog) {
     console.error(`Error: Commit ${sha} details could not be parsed.`);
