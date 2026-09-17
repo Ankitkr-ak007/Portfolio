@@ -7,7 +7,17 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "ai:sync": "node scripts/ai/sync-context.mjs",
+    "ai:sync:full": "node scripts/ai/sync-context.mjs --full",
+    "ai:start": "node scripts/ai/session-start.mjs",
+    "ai:end": "node scripts/ai/session-end.mjs",
+    "ai:validate": "node scripts/ai/validate-context.mjs",
+    "ai:changes": "node scripts/ai/analyze-changes.mjs",
+    "ai:git": "node scripts/ai/analyze-git.mjs",
+    "ai:gaps": "node scripts/ai/detect-gaps.mjs",
+    "ai:inspect": "node scripts/ai/inspect.mjs",
+    "ai:history": "node scripts/ai/history.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.8",

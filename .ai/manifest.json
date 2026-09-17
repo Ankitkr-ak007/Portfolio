@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "project": {
+    "name": "portfolio",
+    "owner": "Ankit Kumar",
+    "positioning": "Engineering × AI × Systems"
+  },
+  "repository": {
+    "url": "https://github.com/Ankitkr-ak007/Portfolio.git",
+    "branch": "main",
+    "head": "2443b40f083c6ed36deb43936e2bbd9c2bdcae1a",
+    "shortHead": "2443b40",
+    "isDirty": true
+  },
+  "runtime": {
+    "node": "v22.22.2",
+    "packageManager": "npm",
+    "framework": "React 19 + Vite 8"
+  },
+  "context": {
+    "lastSyncedAt": "2026-09-17T07:51:43.624Z",
+    "schemaVersion": "1.0.0"
+  },
+  "health": {
+    "contextFresh": true,
+    "gitIndexed": true,
+    "architectureFresh": true,
+    "designSystemFresh": true,
+    "dependencyIndexFresh": true,
+    "routeIndexFresh": true,
+    "knownIssuesReviewed": true
+  },
+  "generatedAt": "2026-09-17T07:51:43.624Z"
+}

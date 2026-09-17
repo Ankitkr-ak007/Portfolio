@@ -36,6 +36,27 @@ npm run build
 
 ---
 
+## 🤖 AI Development & Project Intelligence
+
+This repository includes a persistent, self-updating **Cross-AI Project Intelligence System**.
+
+Before modifying any code in this repository with an AI model:
+
+```bash
+# Initialize AI session, sync context & validate schema
+npm run ai:start
+
+# Inspect project intelligence topics
+npm run ai:inspect architecture
+
+# Finalize AI session and record change log
+npm run ai:end
+```
+
+Read [`AGENTS.md`](file:///C:/Users/Ankit%20Kumar/Portfolio/AGENTS.md) and [`docs/ai/PROJECT_CONTEXT.md`](file:///C:/Users/Ankit%20Kumar/Portfolio/docs/ai/PROJECT_CONTEXT.md) for full identity and architectural rules.
+
+---
+
 ## 📁 Architecture Overview
 
 ```text

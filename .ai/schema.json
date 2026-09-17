@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ProjectIntelligenceManifest",
+  "type": "object",
+  "properties": {
+    "schemaVersion": { "type": "integer" },
+    "project": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "owner": { "type": "string" },
+        "positioning": { "type": "string" }
+      },
+      "required": ["name", "owner", "positioning"]
+    },
+    "repository": {
+      "type": "object",
+      "properties": {
+        "url": { "type": "string" },
+        "branch": { "type": "string" },
+        "head": { "type": "string" },
+        "shortHead": { "type": "string" },
+        "isDirty": { "type": "boolean" }
+      },
+      "required": ["branch", "head", "shortHead", "isDirty"]
+    },
+    "runtime": { "type": "object" },
+    "context": { "type": "object" },
+    "health": { "type": "object" },
+    "generatedAt": { "type": "string" }
+  },
+  "required": ["schemaVersion", "project", "repository", "runtime", "context", "health", "generatedAt"]
+}

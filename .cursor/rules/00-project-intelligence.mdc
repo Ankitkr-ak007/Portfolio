@@ -1,0 +1,20 @@
+---
+description: Always apply repository intelligence and bootstrap protocol for Ankit Kumar Portfolio
+globs: *
+alwaysApply: true
+---
+
+# CURSOR REPOSITORY INTELLIGENCE RULE
+
+Before performing any code generation, refactoring, or bug fixes:
+
+1. **Bootstrap Session**: Run `npm run ai:start`.
+2. **Read Project Context**: Read `docs/ai/PROJECT_CONTEXT.md` for identity and design language constraints.
+3. **Check Architecture & Design System**: Read `docs/ai/ARCHITECTURE.md` and `docs/ai/DESIGN_SYSTEM.md`.
+4. **Check Known Issues**: Consult `docs/ai/KNOWN_ISSUES.md` to avoid regressing overlay scroll locks or 3D frame accumulators.
+5. **Enforce Engineering Standards**:
+   * Functional React 19 components with strict TypeScript types.
+   * Motion for animations (transform and opacity preferred).
+   * Reference-counted Lenis scroll pause/resume controller on all overlays (`data-lenis-prevent="true"`).
+   * WebGL fallback handling for low-end or touch devices.
+6. **Post-Change Sync**: Run `npm run ai:end` after completion.
