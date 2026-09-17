@@ -8,7 +8,10 @@ interface CustomCursorProps {
 
 export const CustomCursor: React.FC<CustomCursorProps> = ({ cursorState }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [isTouchDevice] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  });
 
   // High performance motion values
   const rawX = useMotionValue(-100);
@@ -19,14 +22,7 @@ export const CustomCursor: React.FC<CustomCursorProps> = ({ cursorState }) => {
   const smoothY = useSpring(rawY, springConfig);
 
   useEffect(() => {
-    // Media query checks for touch or reduced motion
-    const touchMedia = window.matchMedia('(pointer: coarse)');
-    const motionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-    if (touchMedia.matches || motionMedia.matches) {
-      setIsTouchDevice(true);
-      return;
-    }
+    if (isTouchDevice) return;
 
     const handleMouseMove = (e: MouseEvent) => {
       rawX.set(e.clientX);
@@ -46,7 +42,7 @@ export const CustomCursor: React.FC<CustomCursorProps> = ({ cursorState }) => {
       document.body.removeEventListener('mouseleave', handleMouseLeave);
       document.body.removeEventListener('mouseenter', handleMouseEnter);
     };
-  }, [rawX, rawY, isVisible]);
+  }, [isTouchDevice, isVisible, rawX, rawY]);
 
   if (isTouchDevice || cursorState.variant === 'hidden' || !isVisible) return null;
 

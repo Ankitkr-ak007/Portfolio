@@ -1,0 +1,10 @@
+// Suppress legacy THREE.Clock deprecation warning emitted by @react-three/fiber internal clock initialization
+if (typeof window !== 'undefined') {
+  const originalWarn = console.warn;
+  console.warn = (...args: unknown[]) => {
+    if (typeof args[0] === 'string' && args[0].includes('THREE.Clock')) {
+      return;
+    }
+    originalWarn(...args);
+  };
+}

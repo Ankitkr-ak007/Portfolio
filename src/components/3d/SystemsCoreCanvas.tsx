@@ -3,6 +3,17 @@ import { Canvas } from '@react-three/fiber';
 import { SystemsCoreScene } from './SystemsCoreScene';
 import { FallbackScene } from './FallbackScene';
 
+// Silence legacy THREE.Clock deprecation warning emitted by R3F internal root initializer
+if (typeof window !== 'undefined') {
+  const originalWarn = console.warn;
+  console.warn = (...args: unknown[]) => {
+    if (typeof args[0] === 'string' && args[0].includes('THREE.Clock')) {
+      return;
+    }
+    originalWarn(...args);
+  };
+}
+
 class WebGLErrorBoundary extends React.Component<
   { children: React.ReactNode; fallback: React.ReactNode },
   { hasError: boolean }
