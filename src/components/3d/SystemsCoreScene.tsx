@@ -1,6 +1,5 @@
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Float } from '@react-three/drei';
 import * as THREE from 'three';
 
 interface SystemsCoreSceneProps {
@@ -12,13 +11,16 @@ export const SystemsCoreScene: React.FC<SystemsCoreSceneProps> = ({ mousePos = {
   const outerRingRef = useRef<THREE.Mesh>(null);
   const particlesRef = useRef<THREE.Points>(null);
 
+  // Time tracking for float animation without THREE.Clock deprecation
+  const timeRef = useRef(0);
+
   // Check reduced motion
   const isReducedMotion = useMemo(
     () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     []
   );
 
-  // Static Float32Array particle positions (200 particles)
+  // Static Float32Array particle positions (180 particles)
   const particleCount = 180;
   const particlePositions = useMemo(() => {
     const positions = new Float32Array(particleCount * 3);
@@ -33,7 +35,12 @@ export const SystemsCoreScene: React.FC<SystemsCoreSceneProps> = ({ mousePos = {
   useFrame((_, delta) => {
     if (isReducedMotion) return;
 
+    timeRef.current += delta;
+
     if (coreRef.current) {
+      // Procedural floating oscillation
+      coreRef.current.position.y = Math.sin(timeRef.current * 1.5) * 0.15;
+
       coreRef.current.rotation.y += delta * 0.22;
       coreRef.current.rotation.x += delta * 0.12;
       
@@ -60,45 +67,43 @@ export const SystemsCoreScene: React.FC<SystemsCoreSceneProps> = ({ mousePos = {
       <pointLight position={[-10, -10, -5]} intensity={0.8} color="#78AFFF" />
 
       {/* Main Core Group */}
-      <Float speed={isReducedMotion ? 0 : 2} rotationIntensity={0.4} floatIntensity={0.6}>
-        <group ref={coreRef}>
-          {/* Inner Crystalline Processor */}
-          <mesh>
-            <icosahedronGeometry args={[1.6, 0]} />
-            <meshStandardMaterial
-              color="#0A0D12"
-              emissive="#78AFFF"
-              emissiveIntensity={0.35}
-              roughness={0.2}
-              metalness={0.9}
-            />
-          </mesh>
+      <group ref={coreRef}>
+        {/* Inner Crystalline Processor */}
+        <mesh>
+          <icosahedronGeometry args={[1.6, 0]} />
+          <meshStandardMaterial
+            color="#0A0D12"
+            emissive="#78AFFF"
+            emissiveIntensity={0.35}
+            roughness={0.2}
+            metalness={0.9}
+          />
+        </mesh>
 
-          {/* Wireframe Holographic Geometry */}
-          <mesh>
-            <icosahedronGeometry args={[1.62, 1]} />
-            <meshBasicMaterial color="#78AFFF" wireframe transparent opacity={0.3} />
-          </mesh>
+        {/* Wireframe Holographic Geometry */}
+        <mesh>
+          <icosahedronGeometry args={[1.62, 1]} />
+          <meshBasicMaterial color="#78AFFF" wireframe transparent opacity={0.3} />
+        </mesh>
 
-          {/* Glowing Center Core */}
-          <mesh>
-            <sphereGeometry args={[0.7, 32, 32]} />
-            <meshBasicMaterial color="#B7D7FF" />
-          </mesh>
+        {/* Glowing Center Core */}
+        <mesh>
+          <sphereGeometry args={[0.7, 32, 32]} />
+          <meshBasicMaterial color="#B7D7FF" />
+        </mesh>
 
-          {/* Orbiting Ring 1 */}
-          <mesh ref={outerRingRef}>
-            <torusGeometry args={[2.5, 0.02, 16, 80]} />
-            <meshBasicMaterial color="#78AFFF" transparent opacity={0.6} />
-          </mesh>
+        {/* Orbiting Ring 1 */}
+        <mesh ref={outerRingRef}>
+          <torusGeometry args={[2.5, 0.02, 16, 80]} />
+          <meshBasicMaterial color="#78AFFF" transparent opacity={0.6} />
+        </mesh>
 
-          {/* Orbiting Ring 2 */}
-          <mesh rotation={[Math.PI / 3, 0, Math.PI / 4]}>
-            <torusGeometry args={[3.2, 0.015, 16, 80]} />
-            <meshBasicMaterial color="#B7D7FF" transparent opacity={0.4} />
-          </mesh>
-        </group>
-      </Float>
+        {/* Orbiting Ring 2 */}
+        <mesh rotation={[Math.PI / 3, 0, Math.PI / 4]}>
+          <torusGeometry args={[3.2, 0.015, 16, 80]} />
+          <meshBasicMaterial color="#B7D7FF" transparent opacity={0.4} />
+        </mesh>
+      </group>
 
       {/* Background Particle Cloud */}
       <points ref={particlesRef}>
