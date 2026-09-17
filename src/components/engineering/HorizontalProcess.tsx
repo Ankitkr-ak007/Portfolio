@@ -54,7 +54,7 @@ export const HorizontalProcess: React.FC = () => {
   ];
 
   return (
-    <section ref={targetRef} className="relative h-[280vh] bg-[#030407]">
+    <section id="process" ref={targetRef} className="relative h-[280vh] bg-[#030407]">
       {/* Sticky Viewport Container */}
       <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden px-6 md:px-12">
         

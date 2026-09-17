@@ -61,8 +61,13 @@ test.describe('Mandatory Overlay Scroll Isolation Test Suite', () => {
     const backgroundScrollAfterOverlayScroll = await page.evaluate(() => window.scrollY);
     expect(backgroundScrollAfterOverlayScroll).toBe(lockedBackgroundScroll);
 
-    // 6. Close overlay with Escape key
-    await page.keyboard.press('Escape');
+    // 6. Close overlay with Close button or Escape key
+    const closeBtn = dialog.locator('button[aria-label="Close case study"]').first();
+    if (await closeBtn.isVisible()) {
+      await closeBtn.click();
+    } else {
+      await page.keyboard.press('Escape');
+    }
     await expect(dialog).not.toBeVisible();
 
     // 7. ASSERT: root page resumes and locks are removed

@@ -1,61 +1,24 @@
 import React, { useState } from 'react';
 import { Cpu, ShieldCheck, Layers, Activity, Eye, ChevronDown } from 'lucide-react';
+import { ENGINEERING_PRINCIPLES } from '../../data/principles';
 import { InteractiveDiagram } from './InteractiveDiagram';
-import { TechConstellation } from './TechConstellation';
 
 export const HowIThink: React.FC = () => {
   const [expandedPrinciple, setExpandedPrinciple] = useState<number | null>(0);
 
-  const principles = [
-    {
-      num: '01',
-      title: 'Architecture > Prompting',
-      tagline: 'RESILIENT GUARDRAILS',
-      icon: <Cpu className="w-5 h-5 text-[#78AFFF]" />,
-      summary: 'AI systems fail when software architecture assumes model outputs are always correct. I wrap LLMs in strict schema verification and auto-repair feedback loops.',
-      detail: 'Prompting is simply an interface. When building production software, you cannot rely on model benevolence. We construct deterministic pipelines where model outputs are validated against typed schemas, and failures trigger automated self-repair routines before reaching state persistence.',
-      flow: 'INPUT → MODEL WORKER → ZOD PARSER → REPAIR LOOP → DATABASE'
-    },
-    {
-      num: '02',
-      title: 'Validation > Blind Trust',
-      tagline: 'ZERO-TRUST BOUNDARIES',
-      icon: <ShieldCheck className="w-5 h-5 text-[#B7D7FF]" />,
-      summary: 'Never trust external or probabilistic input without strict boundary validation. If output fails contracts, intercept immediately.',
-      detail: 'Every sub-agent tool call, user submission, and LLM JSON payload passes through runtime assertions. We eliminate downstream corrupted state by catching malformed structures at the exact ingestion boundary.',
-      flow: 'PAYLOAD → RUNTIME TYPE CHECK → ASSERTION → DISPATCH'
-    },
-    {
-      num: '03',
-      title: 'Determinism > Accidental Behavior',
-      tagline: 'PREDICTABLE STATE',
-      icon: <Layers className="w-5 h-5 text-[#38BDF8]" />,
-      summary: 'Software requires explicit contracts, compile-time memory safety, and predictable state transitions. Rust and C++ provide stability when LLMs fluctuate.',
-      detail: 'Where performance and reliability are paramount, we employ Rust ownership semantics and C++ zero-allocation queues. Combining deterministic systems code with probabilistic AI models yields fast, reliable applications.',
-      flow: 'MEMORY SAFETY · COMPILE-TIME CHECKS · ZERO GC PAUSES'
-    },
-    {
-      num: '04',
-      title: 'Observability > Guessing',
-      tagline: 'AUDITABLE TRACES',
-      icon: <Eye className="w-5 h-5 text-[#F59E0B]" />,
-      summary: 'You cannot optimize or debug what you cannot observe. Every sub-agent decision, token packet, and state delta must be traceable in real time.',
-      detail: 'We build visual DAG topologies and event streaming into every multi-agent system. When a failure occurs, the exact sub-agent, prompt context, and token response are indexed for immediate post-mortem debugging.',
-      flow: 'TRACE LOGGING → EVENT STREAM → TOPOLOGY INSPECTION'
-    },
-    {
-      num: '05',
-      title: 'Systems > Isolated Features',
-      tagline: 'COHESIVE INTEGRATION',
-      icon: <Activity className="w-5 h-5 text-emerald-400" />,
-      summary: 'Software is not a disconnected collection of UI widgets. It is an interconnected operating system where memory, backend, and interface act as one.',
-      detail: 'From GPU shaders down to low-level socket queues, every architectural layer should support a singular, cohesive purpose. Engineering elegance lives in how clean and resilient the entire machine operates under load.',
-      flow: 'INTERFACE ↔ BACKEND ↔ MEMORY ↔ OBSERVABILITY'
+  const getPrincipleIcon = (name: string) => {
+    switch (name) {
+      case 'Cpu': return <Cpu className="w-5 h-5 text-[#78AFFF]" />;
+      case 'ShieldCheck': return <ShieldCheck className="w-5 h-5 text-[#B7D7FF]" />;
+      case 'Layers': return <Layers className="w-5 h-5 text-[#38BDF8]" />;
+      case 'Eye': return <Eye className="w-5 h-5 text-[#F59E0B]" />;
+      case 'Activity': return <Activity className="w-5 h-5 text-emerald-400" />;
+      default: return <Cpu className="w-5 h-5 text-[#78AFFF]" />;
     }
-  ];
+  };
 
   return (
-    <section id="engineering" className="py-28 px-6 md:px-12 bg-[#030407] relative">
+    <section id="thinking" className="py-28 px-6 md:px-12 bg-[#030407] relative">
       <div className="max-w-7xl mx-auto space-y-24">
         
         {/* Section Header */}
@@ -77,7 +40,7 @@ export const HowIThink: React.FC = () => {
 
         {/* 5 Principles Expandable Matrix */}
         <div className="space-y-4">
-          {principles.map((p, idx) => {
+          {ENGINEERING_PRINCIPLES.map((p, idx) => {
             const isExpanded = expandedPrinciple === idx;
             return (
               <div
@@ -95,7 +58,7 @@ export const HowIThink: React.FC = () => {
                   <div className="flex items-center space-x-4 sm:space-x-6">
                     <span className="font-mono text-xl sm:text-2xl font-black text-[#78AFFF]">{p.num}</span>
                     <div className="p-2.5 rounded-xl bg-[#10141E] border border-[rgba(255,255,255,0.06)]">
-                      {p.icon}
+                      {getPrincipleIcon(p.iconName)}
                     </div>
                     <div>
                       <div className="font-mono text-[10px] text-[#475569] uppercase tracking-wider">
@@ -134,9 +97,6 @@ export const HowIThink: React.FC = () => {
 
         {/* Interactive Architecture Flow Diagram */}
         <InteractiveDiagram />
-
-        {/* Tech Constellation Network */}
-        <TechConstellation />
 
       </div>
     </section>

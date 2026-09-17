@@ -121,8 +121,8 @@ export const Header: React.FC<HeaderProps> = ({
           })}
         </nav>
 
-        {/* Desktop Quick Actions (Terminal, ⌘K, Contact) */}
-        <div className="hidden md:flex items-center space-x-2.5">
+        {/* Quick Actions (Terminal, ⌘K, Contact) */}
+        <div className="flex items-center space-x-2">
           {/* Terminal Quick Trigger */}
           <Magnetic strength={0.25}>
             <button
@@ -148,7 +148,7 @@ export const Header: React.FC<HeaderProps> = ({
               title="Open Command Palette (Ctrl+K)"
             >
               <Command className="w-3.5 h-3.5 text-[#78AFFF]" />
-              <span className="text-[11px]">⌘K</span>
+              <span className="text-[11px] hidden sm:inline">⌘K</span>
             </button>
           </Magnetic>
 
@@ -162,7 +162,7 @@ export const Header: React.FC<HeaderProps> = ({
               }}
               onMouseEnter={() => onCursorHover(true, 'CONTACT', 'button')}
               onMouseLeave={() => onCursorHover(false)}
-              className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#10141E] to-[#1A2234] border border-[rgba(120,175,255,0.25)] text-xs font-mono tracking-wider font-semibold text-[#B7D7FF] hover:border-[#78AFFF] hover:shadow-[0_0_20px_rgba(120,175,255,0.2)] transition-all"
+              className="hidden md:flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#10141E] to-[#1A2234] border border-[rgba(120,175,255,0.25)] text-xs font-mono tracking-wider font-semibold text-[#B7D7FF] hover:border-[#78AFFF] hover:shadow-[0_0_20px_rgba(120,175,255,0.2)] transition-all"
             >
               <span>LET'S TALK</span>
               <ArrowUpRight className="w-3.5 h-3.5 text-[#78AFFF]" />
