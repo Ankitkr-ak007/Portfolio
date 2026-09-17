@@ -6,17 +6,18 @@ import { Preloader } from './components/ui/Preloader';
 import { CustomCursor } from './components/layout/CustomCursor';
 import { Header } from './components/layout/Header';
 import { Hero } from './components/hero/Hero';
-import { TechStrip } from './components/ui/TechStrip';
 import { EditorialIntro } from './components/ui/EditorialIntro';
-import { HorizontalProcess } from './components/engineering/HorizontalProcess';
+import { TechStrip } from './components/ui/TechStrip';
+import { TechConstellation } from './components/engineering/TechConstellation';
 import { SelectedWork } from './components/projects/SelectedWork';
 import { HowIThink } from './components/engineering/HowIThink';
+import { HorizontalProcess } from './components/engineering/HorizontalProcess';
 import { ExperienceTimeline } from './components/experience/ExperienceTimeline';
 import { AboutSection } from './components/about/AboutSection';
 import { ContactSection } from './components/contact/ContactSection';
 import { Footer } from './components/layout/Footer';
 
-// Lazy loaded components for optimized chunk loading & performance
+// Lazy loaded below-the-fold modules for optimal loading performance
 const LabSection = lazy(() => import('./components/lab/LabSection').then((m) => ({ default: m.LabSection })));
 const AiVsEngineering = lazy(() => import('./components/insight/AiVsEngineering').then((m) => ({ default: m.AiVsEngineering })));
 const AiPhilosophyBanner = lazy(() => import('./components/insight/AiPhilosophyBanner').then((m) => ({ default: m.AiPhilosophyBanner })));
@@ -54,31 +55,56 @@ export function App() {
         onCursorHover={setCursorHover}
       />
 
-      {/* Main Page Narrative Flow */}
+      {/* 12-Stage Information Architecture Narrative Flow */}
       <main className="relative z-10">
+        {/* 01: Hero / Systems Core */}
         <Hero
           onCursorHover={setCursorHover}
           onOpenTerminal={() => setTerminalOpen(true)}
         />
-        <TechStrip />
-        <EditorialIntro />
-        <HorizontalProcess />
-        <SelectedWork onCursorHover={setCursorHover} />
-        <HowIThink />
-        <ExperienceTimeline />
 
-        {/* Below-The-Fold Interactive Modules */}
+        {/* 02: Introduction */}
+        <EditorialIntro />
+
+        {/* 03: Engineering DNA */}
+        <TechStrip />
+        <section id="engineering-dna" className="py-20 px-6 md:px-12 bg-[#030407]">
+          <div className="max-w-7xl mx-auto">
+            <TechConstellation />
+          </div>
+        </section>
+
+        {/* 04: Selected Work */}
+        <SelectedWork onCursorHover={setCursorHover} />
+
+        {/* 05: How I Think */}
+        <HowIThink />
+
+        {/* 06: Architecture Visualizer */}
+        <HorizontalProcess />
+
+        {/* 07: AI Lab */}
         <Suspense fallback={<div className="py-20 text-center font-mono text-xs text-[#475569]">INITIALIZING LAB MODULES...</div>}>
           <LabSection />
+        </Suspense>
+
+        {/* 08: Experience */}
+        <ExperienceTimeline />
+
+        {/* 09: About */}
+        <AboutSection />
+
+        {/* 10: Writing / Thoughts */}
+        <Suspense fallback={null}>
           <AiVsEngineering />
           <AiPhilosophyBanner />
         </Suspense>
 
-        <AboutSection />
+        {/* 11: Contact */}
         <ContactSection onCursorHover={setCursorHover} />
       </main>
 
-      {/* Footer */}
+      {/* 12: Footer */}
       <Footer onCursorHover={setCursorHover} />
 
       {/* Command Palette (Ctrl+K / ⌘K) */}

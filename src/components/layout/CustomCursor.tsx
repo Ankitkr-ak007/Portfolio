@@ -10,7 +10,10 @@ export const CustomCursor: React.FC<CustomCursorProps> = ({ cursorState }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isTouchDevice] = useState(() => {
     if (typeof window === 'undefined') return false;
-    return window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    return (
+      window.matchMedia('(pointer: coarse)').matches ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    );
   });
 
   const rawX = useMotionValue(-100);
@@ -45,8 +48,33 @@ export const CustomCursor: React.FC<CustomCursorProps> = ({ cursorState }) => {
 
   if (isTouchDevice || cursorState.variant === 'hidden' || !isVisible) return null;
 
-  const isProject = cursorState.variant === 'project';
-  const isButton = cursorState.variant === 'button';
+  const getVariantStyles = () => {
+    switch (cursorState.variant) {
+      case 'project':
+        return 'h-24 w-24 bg-[rgba(10,13,20,0.92)] border-[#78AFFF] shadow-[0_0_30px_rgba(120,175,255,0.35)]';
+      case '3d':
+        return 'h-20 w-20 bg-[rgba(16,20,30,0.9)] border-[#38BDF8] shadow-[0_0_25px_rgba(56,189,248,0.3)]';
+      case 'drag':
+        return 'h-16 w-16 bg-[rgba(10,13,20,0.85)] border-[#F59E0B] shadow-[0_0_20px_rgba(245,158,11,0.25)]';
+      case 'link':
+      case 'button':
+        return 'h-14 w-14 bg-[rgba(120,175,255,0.12)] border-[#78AFFF]';
+      default:
+        return cursorState.isHovered
+          ? 'h-12 w-12 bg-[rgba(120,175,255,0.08)] border-[#78AFFF]'
+          : 'h-8 w-8 bg-transparent border-[rgba(120,175,255,0.25)]';
+    }
+  };
+
+  const getLabel = () => {
+    if (cursorState.label) return cursorState.label;
+    if (cursorState.variant === 'project') return 'VIEW ↗';
+    if (cursorState.variant === '3d') return 'EXPLORE';
+    if (cursorState.variant === 'drag') return 'DRAG';
+    return null;
+  };
+
+  const label = getLabel();
 
   return (
     <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden" aria-hidden="true">
@@ -63,15 +91,7 @@ export const CustomCursor: React.FC<CustomCursorProps> = ({ cursorState }) => {
 
       {/* Outer Spring Follower / Dynamic Label Bubble */}
       <motion.div
-        className={`fixed left-0 top-0 flex items-center justify-center rounded-full border border-[rgba(120,175,255,0.35)] backdrop-blur-[2px] transition-all duration-200 ${
-          isProject
-            ? 'h-24 w-24 bg-[rgba(10,13,20,0.9)] border-[#78AFFF] shadow-[0_0_30px_rgba(120,175,255,0.35)]'
-            : isButton
-            ? 'h-14 w-14 bg-[rgba(120,175,255,0.12)] border-[#78AFFF]'
-            : cursorState.isHovered
-            ? 'h-12 w-12 bg-[rgba(120,175,255,0.08)] border-[#78AFFF]'
-            : 'h-8 w-8 bg-transparent'
-        }`}
+        className={`fixed left-0 top-0 flex items-center justify-center rounded-full border backdrop-blur-[2px] transition-all duration-200 ${getVariantStyles()}`}
         style={{
           x: smoothX,
           y: smoothY,
@@ -79,9 +99,9 @@ export const CustomCursor: React.FC<CustomCursorProps> = ({ cursorState }) => {
           translateY: '-50%',
         }}
       >
-        {cursorState.label && (
+        {label && (
           <span className="text-[10px] font-mono tracking-wider font-bold text-[#B7D7FF] uppercase px-2 text-center select-none">
-            {cursorState.label}
+            {label}
           </span>
         )}
       </motion.div>

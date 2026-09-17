@@ -1,9 +1,11 @@
 import { useState, useCallback } from 'react';
 
+export type CursorVariant = 'default' | 'project' | 'button' | 'link' | '3d' | 'drag' | 'hidden';
+
 export interface CursorState {
   isHovered: boolean;
   label: string;
-  variant: 'default' | 'project' | 'button' | 'link' | 'hidden';
+  variant: CursorVariant;
 }
 
 export function useCustomCursor() {
@@ -13,7 +15,7 @@ export function useCustomCursor() {
     variant: 'default',
   });
 
-  const setCursorHover = useCallback((isHovered: boolean, label = '', variant: CursorState['variant'] = 'default') => {
+  const setCursorHover = useCallback((isHovered: boolean, label = '', variant: CursorVariant = 'default') => {
     setCursor({
       isHovered,
       label,

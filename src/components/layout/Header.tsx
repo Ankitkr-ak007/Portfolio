@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X, Command, ArrowUpRight, Terminal } from 'lucide-react';
+import { Menu, X, Command, ArrowUpRight, Terminal, Mail } from 'lucide-react';
+import { BrandIcon } from '../ui/BrandIcons';
 import { Magnetic } from '../motion/Magnetic';
 
 interface HeaderProps {
   onOpenCommandPalette: () => void;
   onOpenTerminal: () => void;
-  onCursorHover: (hovered: boolean, label?: string, variant?: 'default' | 'project' | 'button' | 'link' | 'hidden') => void;
+  onCursorHover: (hovered: boolean, label?: string, variant?: 'default' | 'project' | 'button' | 'link' | '3d' | 'drag' | 'hidden') => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -22,7 +23,7 @@ export const Header: React.FC<HeaderProps> = ({
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 30);
 
-      const sections = ['hero', 'work', 'engineering', 'experience', 'lab', 'about', 'contact'];
+      const sections = ['hero', 'thinking', 'process', 'work', 'lab', 'experience', 'about', 'contact'];
       const scrollPos = window.scrollY + 220;
 
       for (const sectionId of sections) {
@@ -44,9 +45,10 @@ export const Header: React.FC<HeaderProps> = ({
 
   const navLinks = [
     { name: 'WORK', href: '#work', id: 'work' },
-    { name: 'ENGINEERING', href: '#engineering', id: 'engineering' },
-    { name: 'EXPERIENCE', href: '#experience', id: 'experience' },
+    { name: 'THINKING', href: '#thinking', id: 'thinking' },
+    { name: 'SYSTEMS', href: '#process', id: 'process' },
     { name: 'LAB', href: '#lab', id: 'lab' },
+    { name: 'EXPERIENCE', href: '#experience', id: 'experience' },
     { name: 'ABOUT', href: '#about', id: 'about' },
   ];
 
@@ -108,7 +110,7 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 {isActive && (
                   <motion.div
-                    layoutId="activeNavTab"
+                    layoutId="active-nav-indicator"
                     className="absolute inset-0 bg-[#161D2B] border border-[rgba(120,175,255,0.3)] rounded-full shadow-[0_0_15px_rgba(120,175,255,0.15)] -z-10"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
@@ -179,52 +181,103 @@ export const Header: React.FC<HeaderProps> = ({
         </button>
       </div>
 
-      {/* Mobile Menu Drawer */}
+      {/* Fullscreen Mobile Navigation Composition */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-[#0A0D14] border-b border-[rgba(255,255,255,0.08)] px-6 py-6 space-y-4"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 top-[68px] z-50 bg-[#030407]/98 backdrop-blur-2xl flex flex-col justify-between p-6 sm:p-8 md:hidden overflow-y-auto"
           >
-            <nav className="flex flex-col space-y-4">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollTo(link.href);
-                  }}
-                  className="font-mono text-sm tracking-widest text-[#94A3B8] hover:text-[#78AFFF] py-1"
-                >
-                  {link.name}
-                </a>
-              ))}
-            </nav>
-            <div className="pt-4 border-t border-[rgba(255,255,255,0.08)] flex items-center justify-between">
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenCommandPalette();
-                }}
-                className="flex items-center space-x-2 font-mono text-xs text-[#94A3B8]"
-              >
-                <Command className="w-4 h-4 text-[#78AFFF]" />
-                <span>COMMAND PALETTE (CTRL+K)</span>
-              </button>
+            {/* Luminous Animated Signal Line */}
+            <div className="relative w-full h-[1px] bg-[rgba(255,255,255,0.08)] overflow-hidden mb-6">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#78AFFF] to-transparent w-36 animate-signal" />
+            </div>
 
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenTerminal();
-                }}
-                className="flex items-center space-x-2 font-mono text-xs text-[#78AFFF]"
-              >
-                <Terminal className="w-4 h-4" />
-                <span>CLI</span>
-              </button>
+            {/* Staggered Navigation Links */}
+            <div className="space-y-4 my-auto">
+              <div className="font-mono text-[10px] text-[#78AFFF] uppercase tracking-widest mb-2">
+                NAVIGATION ARCHITECTURE
+              </div>
+              {navLinks.map((link, idx) => (
+                <motion.div
+                  key={link.name}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.06 }}
+                >
+                  <a
+                    href={link.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollTo(link.href);
+                    }}
+                    className="block text-3xl font-black uppercase tracking-tight text-[#F8FAFC] hover:text-[#78AFFF] transition-colors py-2"
+                  >
+                    {link.name}
+                  </a>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Mobile Footer & Quick Triggers */}
+            <div className="pt-6 border-t border-[rgba(255,255,255,0.08)] space-y-4">
+              <div className="flex items-center justify-between gap-3">
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenCommandPalette();
+                  }}
+                  className="flex-1 flex items-center justify-center space-x-2 py-3 rounded-xl bg-[#0A0D14] border border-[rgba(255,255,255,0.08)] font-mono text-xs text-[#94A3B8]"
+                >
+                  <Command className="w-4 h-4 text-[#78AFFF]" />
+                  <span>COMMAND PALETTE (⌘K)</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenTerminal();
+                  }}
+                  className="p-3 rounded-xl bg-[#0A0D14] border border-[rgba(255,255,255,0.08)] font-mono text-xs text-[#78AFFF]"
+                  aria-label="Open CLI Terminal"
+                >
+                  <Terminal className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Social Links & Contact */}
+              <div className="flex items-center justify-between font-mono text-xs text-[#475569]">
+                <div className="flex space-x-4">
+                  <a
+                    href="https://github.com/Ankitkr-ak007"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#94A3B8] hover:text-[#78AFFF] transition-colors"
+                  >
+                    <BrandIcon name="github" className="w-4 h-4" />
+                  </a>
+                  <a
+                    href="https://linkedin.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#94A3B8] hover:text-[#78AFFF] transition-colors"
+                  >
+                    <svg className="w-4 h-4 fill-current text-[#38BDF8]" viewBox="0 0 24 24">
+                      <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                    </svg>
+                  </a>
+                  <a
+                    href="mailto:ankit.developer@example.com"
+                    className="text-[#94A3B8] hover:text-[#78AFFF] transition-colors"
+                  >
+                    <Mail className="w-4 h-4" />
+                  </a>
+                </div>
+                <span>ANKIT KUMAR // 2026</span>
+              </div>
             </div>
           </motion.div>
         )}

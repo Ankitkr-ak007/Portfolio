@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, Command, ArrowRight, Terminal, Layers, Sparkles, X } from 'lucide-react';
-import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
+import { useScrollLock, useOverlayNavigation, OverlayScrollArea } from '../../overlays';
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -15,38 +15,24 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   onOpenTerminal,
 }) => {
   const [query, setQuery] = useState('');
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Lock body scroll when open
-  useBodyScrollLock(isOpen);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        if (isOpen) onClose();
-        else setQuery('');
-      }
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  useScrollLock(isOpen);
+  useOverlayNavigation({ isOpen, onClose, containerRef });
 
   if (!isOpen) return null;
 
   const commands = [
     { label: 'Go to Selected Work', action: () => scrollTo('#work'), icon: <Layers className="w-4 h-4 text-[#78AFFF]" /> },
-    { label: 'Go to Engineering Philosophy', action: () => scrollTo('#engineering'), icon: <Sparkles className="w-4 h-4 text-[#B7D7FF]" /> },
+    { label: 'Go to Engineering Philosophy', action: () => scrollTo('#thinking'), icon: <Sparkles className="w-4 h-4 text-[#B7D7FF]" /> },
+    { label: 'Go to Engineering Architecture', action: () => scrollTo('#process'), icon: <ArrowRight className="w-4 h-4 text-[#38BDF8]" /> },
     { label: 'Go to Experience Timeline', action: () => scrollTo('#experience'), icon: <ArrowRight className="w-4 h-4 text-[#38BDF8]" /> },
     { label: 'Go to The Lab Experiments', action: () => scrollTo('#lab'), icon: <Terminal className="w-4 h-4 text-[#78AFFF]" /> },
-    { label: 'Go to About Me', action: () => scrollTo('#about'), icon: <Search className="w-4 h-4 text-[#9BA4B2]" /> },
+    { label: 'Go to About Me', action: () => scrollTo('#about'), icon: <Search className="w-4 h-4 text-[#94A3B8]" /> },
     { label: 'Go to Contact', action: () => scrollTo('#contact'), icon: <ArrowRight className="w-4 h-4 text-emerald-400" /> },
     { label: 'Open Interactive Terminal', action: () => { onClose(); onOpenTerminal(); }, icon: <Terminal className="w-4 h-4 text-[#78AFFF]" /> },
     { label: 'Open GitHub Repository', action: () => window.open('https://github.com/Ankitkr-ak007', '_blank', 'noopener,noreferrer'), icon: (
-      <svg className="w-4 h-4 fill-current text-[#F5F7FA]" viewBox="0 0 24 24">
+      <svg className="w-4 h-4 fill-current text-[#F8FAFC]" viewBox="0 0 24 24">
         <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
       </svg>
     ) },
@@ -64,14 +50,20 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4" role="dialog" aria-modal="true" aria-label="Command Palette">
+      <div
+        ref={containerRef}
+        className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Command Palette"
+      >
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-[#050609]/85 backdrop-blur-md"
+          className="fixed inset-0 bg-[#030407]/90 backdrop-blur-md"
         />
 
         {/* Modal Window */}
@@ -79,7 +71,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           initial={{ opacity: 0, scale: 0.95, y: -10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: -10 }}
-          className="relative w-full max-w-xl bg-[#0A0D12] border border-[rgba(120,175,255,0.2)] rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.95)] z-10 overflow-hidden font-mono"
+          className="relative w-full max-w-xl bg-[#0A0D14] border border-[rgba(120,175,255,0.2)] rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.95)] z-10 overflow-hidden font-mono"
         >
           {/* Search Input Bar (Fixed) */}
           <div className="flex items-center px-4 border-b border-[rgba(255,255,255,0.08)]">
@@ -91,40 +83,35 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
               placeholder="Type a command or search..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full py-4 bg-transparent text-sm text-[#F5F7FA] placeholder-[#596170] focus:outline-none"
+              className="w-full py-4 bg-transparent text-sm text-[#F8FAFC] placeholder-[#475569] focus:outline-none"
             />
-            <button onClick={onClose} aria-label="Close command palette" className="p-1 text-[#596170] hover:text-[#F5F7FA]">
+            <button onClick={onClose} aria-label="Close command palette" className="p-1 text-[#475569] hover:text-[#F8FAFC]">
               <X className="w-4 h-4" />
             </button>
           </div>
 
           {/* Dedicated Command Results Scroll Container */}
-          <div
-            data-lenis-prevent="true"
-            data-lenis-prevent-touch="true"
-            onWheel={(e) => e.stopPropagation()}
-            className="max-h-[min(60dvh,480px)] overflow-y-auto overscroll-contain p-2 space-y-1 font-mono"
-          >
+          <OverlayScrollArea className="max-h-[min(60dvh,480px)] p-2 space-y-1 font-mono">
             {filteredCommands.length > 0 ? (
               filteredCommands.map((cmd, i) => (
                 <button
                   key={i}
                   onClick={cmd.action}
-                  className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-[#10141B] text-xs text-[#9BA4B2] hover:text-[#F5F7FA] transition-colors group text-left"
+                  className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-[#10141E] text-xs text-[#94A3B8] hover:text-[#F8FAFC] transition-colors group text-left"
                 >
                   <div className="flex items-center space-x-3">
                     {cmd.icon}
                     <span>{cmd.label}</span>
                   </div>
-                  <span className="text-[10px] text-[#596170] group-hover:text-[#78AFFF]">EXECUTE ↵</span>
+                  <span className="text-[10px] text-[#475569] group-hover:text-[#78AFFF]">EXECUTE ↵</span>
                 </button>
               ))
             ) : (
-              <div className="p-4 text-center text-xs text-[#596170]">No matching commands</div>
+              <div className="p-4 text-center text-xs text-[#475569]">No matching commands</div>
             )}
-          </div>
+          </OverlayScrollArea>
 
-          <div className="px-4 py-2 bg-[#050609] border-t border-[rgba(255,255,255,0.06)] text-[10px] text-[#596170] flex justify-between">
+          <div className="px-4 py-2 bg-[#030407] border-t border-[rgba(255,255,255,0.06)] text-[10px] text-[#475569] flex justify-between">
             <span>PRESS ESC TO CLOSE</span>
             <span>ANKIT KUMAR CLI</span>
           </div>

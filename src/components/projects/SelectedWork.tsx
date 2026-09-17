@@ -4,11 +4,11 @@ import { ArrowUpRight } from 'lucide-react';
 import { PROJECTS } from '../../data/projects';
 import type { Project } from '../../data/projects';
 import { CaseStudyModal } from './CaseStudyModal';
-import { Project3DVisual } from '../3d/Project3DVisual';
+import { ProjectCardVisual } from './ProjectCardVisual';
 import { BrandIcon } from '../ui/BrandIcons';
 
 interface SelectedWorkProps {
-  onCursorHover: (hovered: boolean, label?: string, variant?: 'default' | 'project' | 'button' | 'link' | 'hidden') => void;
+  onCursorHover: (hovered: boolean, label?: string, variant?: 'default' | 'project' | 'button' | 'link' | '3d' | 'drag' | 'hidden') => void;
 }
 
 export const SelectedWork: React.FC<SelectedWorkProps> = ({ onCursorHover }) => {
@@ -105,14 +105,14 @@ export const SelectedWork: React.FC<SelectedWorkProps> = ({ onCursorHover }) => 
                     <span className="text-[#78AFFF]">PHYSICALLY RENDERED</span>
                   </div>
 
-                  {/* 3D Scene */}
+                  {/* 3D Wireframe Visual Preview */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <Project3DVisual type={project.hero3D} />
+                    <ProjectCardVisual type={project.hero3D} />
                   </div>
 
                   <div className="font-mono text-[10px] text-[#94A3B8] flex justify-between z-10">
                     <span>{project.hero3D.toUpperCase()}</span>
-                    <span>R3F // WEBGL</span>
+                    <span>HOLOGRAPHIC MATRIX</span>
                   </div>
                 </div>
 

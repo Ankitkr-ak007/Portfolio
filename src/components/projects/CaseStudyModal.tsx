@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useRef } from 'react';
 import { motion } from 'motion/react';
 import { X, ExternalLink, Cpu, ShieldCheck, Layers, CheckCircle2, Lightbulb, GitBranch } from 'lucide-react';
 import type { Project } from '../../data/projects';
-import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
+import { useScrollLock, useOverlayNavigation, OverlayScrollArea } from '../../overlays';
 import { Project3DVisual } from '../3d/Project3DVisual';
 import { BrandIcon } from '../ui/BrandIcons';
 
 interface CaseStudyModalProps {
   project: Project | null;
   onClose: () => void;
-  onCursorHover: (hovered: boolean, label?: string, variant?: 'default' | 'project' | 'button' | 'link' | 'hidden') => void;
+  onCursorHover: (hovered: boolean, label?: string, variant?: 'default' | 'project' | 'button' | 'link' | '3d' | 'drag' | 'hidden') => void;
 }
 
 export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
@@ -17,22 +17,18 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
   onClose,
   onCursorHover,
 }) => {
-  useBodyScrollLock(!!project);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  useScrollLock(!!project);
+  useOverlayNavigation({ isOpen: !!project, onClose, containerRef });
 
   if (!project) return null;
 
-  const { overview, problem, system, architecture, decisions, challenges, outcomes, learnings } = project.caseStudy;
+  const { role, overview, problem, approach, system, architecture, decisions, challenges, outcomes, learnings } = project.caseStudy;
 
   return (
     <div
+      ref={containerRef}
       className="fixed inset-0 z-50 h-[100dvh] w-full overflow-hidden"
       role="dialog"
       aria-modal="true"
@@ -48,12 +44,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
       />
 
       {/* Dedicated Modal Scroll Container */}
-      <div
-        data-lenis-prevent="true"
-        data-lenis-prevent-touch="true"
-        onWheel={(e) => e.stopPropagation()}
-        className="relative z-10 h-[100dvh] w-full overflow-y-auto overflow-x-hidden overscroll-contain flex items-center justify-center p-4 sm:p-6 lg:p-10"
-      >
+      <OverlayScrollArea className="relative z-10 flex items-center justify-center p-4 sm:p-6 lg:p-10">
         <motion.div
           layoutId={`project-card-${project.id}`}
           className="relative w-full max-w-5xl bg-[#0A0D14] border border-[rgba(120,175,255,0.25)] rounded-2xl p-6 sm:p-10 shadow-[0_0_90px_rgba(0,0,0,0.95)] my-auto max-h-[90dvh] overflow-y-auto overscroll-contain"
@@ -65,6 +56,8 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
                 SYSTEM // {project.number}
               </span>
               <span className="text-[#94A3B8]">{project.category}</span>
+              <span className="text-[#475569]">·</span>
+              <span className="text-[#78AFFF] font-semibold">{role}</span>
               <span className="text-[#475569]">·</span>
               <span className="text-[#475569]">{project.year}</span>
             </div>
@@ -112,24 +105,34 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
             </div>
           </div>
 
-          {/* Section 02: Problem & System Approach */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div className="p-6 rounded-xl bg-[#10141E]/70 border border-[rgba(255,255,255,0.06)] space-y-3">
+          {/* Section 02: Problem & Approach & System */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+            <div className="p-5 rounded-xl bg-[#10141E]/70 border border-[rgba(255,255,255,0.06)] space-y-2.5">
               <div className="flex items-center space-x-2 text-xs font-mono text-[#78AFFF] uppercase tracking-wider">
                 <Cpu className="w-4 h-4" />
-                <span>01 // THE PROBLEM STATEMENT</span>
+                <span>01 // THE PROBLEM</span>
               </div>
-              <p className="text-sm text-[#94A3B8] leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
                 {problem}
               </p>
             </div>
 
-            <div className="p-6 rounded-xl bg-[#10141E]/70 border border-[rgba(255,255,255,0.06)] space-y-3">
+            <div className="p-5 rounded-xl bg-[#10141E]/70 border border-[rgba(255,255,255,0.06)] space-y-2.5">
+              <div className="flex items-center space-x-2 text-xs font-mono text-[#38BDF8] uppercase tracking-wider">
+                <Lightbulb className="w-4 h-4" />
+                <span>02 // THE APPROACH</span>
+              </div>
+              <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
+                {approach}
+              </p>
+            </div>
+
+            <div className="p-5 rounded-xl bg-[#10141E]/70 border border-[rgba(255,255,255,0.06)] space-y-2.5">
               <div className="flex items-center space-x-2 text-xs font-mono text-[#B7D7FF] uppercase tracking-wider">
                 <ShieldCheck className="w-4 h-4" />
-                <span>02 // THE SYSTEM ARCHITECTURE</span>
+                <span>03 // THE SYSTEM</span>
               </div>
-              <p className="text-sm text-[#94A3B8] leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
                 {system}
               </p>
             </div>
@@ -139,7 +142,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
           <div className="p-6 rounded-xl bg-gradient-to-r from-[#10141E] to-[#0A0D14] border border-[rgba(120,175,255,0.25)] mb-8 space-y-3">
             <div className="flex items-center space-x-2 text-xs font-mono text-[#78AFFF] uppercase tracking-wider">
               <Layers className="w-4 h-4" />
-              <span>03 // DATA & EXECUTION FLOW</span>
+              <span>04 // DATA & EXECUTION FLOW</span>
             </div>
             <div className="p-4 rounded-lg bg-[#030407] border border-[rgba(255,255,255,0.08)] font-mono text-xs text-[#B7D7FF] overflow-x-auto leading-relaxed">
               <code>{architecture}</code>
@@ -150,7 +153,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
           <div className="mb-8 space-y-3">
             <div className="flex items-center space-x-2 font-mono text-xs text-[#78AFFF] uppercase tracking-widest">
               <GitBranch className="w-4 h-4" />
-              <span>04 // ARCHITECTURAL DECISIONS</span>
+              <span>05 // ARCHITECTURAL DECISIONS</span>
             </div>
             <div className="grid grid-cols-1 gap-2.5">
               {decisions.map((dec, i) => (
@@ -165,7 +168,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
           {/* Section 05: Challenges Overcome */}
           <div className="mb-8 space-y-3">
             <div className="font-mono text-xs text-[#475569] uppercase tracking-widest">
-              05 // TECHNICAL CHALLENGES OVERCOME
+              06 // TECHNICAL CHALLENGES OVERCOME
             </div>
             <div className="grid grid-cols-1 gap-2.5">
               {challenges.map((c, i) => (
@@ -180,7 +183,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
           {/* Section 06 & 07: Outcomes and Learnings */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div className="p-6 rounded-xl bg-[rgba(120,175,255,0.06)] border border-[rgba(120,175,255,0.2)] space-y-2">
-              <div className="font-mono text-xs text-[#78AFFF] uppercase">06 // MEASURABLE OUTCOME</div>
+              <div className="font-mono text-xs text-[#78AFFF] uppercase">07 // QUALITATIVE / MEASURABLE OUTCOME</div>
               <p className="text-sm text-[#F8FAFC] font-medium leading-relaxed">
                 {outcomes}
               </p>
@@ -189,7 +192,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
             <div className="p-6 rounded-xl bg-[#10141E]/70 border border-[rgba(255,255,255,0.06)] space-y-2">
               <div className="font-mono text-xs text-[#F59E0B] uppercase flex items-center space-x-1.5">
                 <Lightbulb className="w-3.5 h-3.5" />
-                <span>07 // KEY LESSONS LEARNED</span>
+                <span>08 // KEY LESSONS LEARNED</span>
               </div>
               <p className="text-sm text-[#94A3B8] leading-relaxed">
                 {learnings}
@@ -222,7 +225,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
             </button>
           </div>
         </motion.div>
-      </div>
+      </OverlayScrollArea>
     </div>
   );
 };
