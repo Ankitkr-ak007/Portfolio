@@ -152,22 +152,33 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onCursorHover })
                 DIRECT CONNECT CHANNELS
               </h3>
 
-              {/* Email Box with 1-Click Copy */}
-              <div className="p-6 rounded-2xl bg-[#0A0D14] border border-[rgba(255,255,255,0.07)] space-y-3 font-mono">
+              {/* Email Box with Mailto & 1-Click Copy */}
+              <div className="p-6 rounded-2xl bg-[#0A0D14] border border-[rgba(255,255,255,0.07)] space-y-4 font-mono">
                 <div className="text-xs text-[#78AFFF] flex items-center space-x-2">
                   <Mail className="w-4 h-4" />
                   <span>DIRECT INBOX</span>
                 </div>
                 <div className="text-base text-[#F8FAFC] font-bold select-all">
-                  {emailAddress}
+                  ankit.kr.dev@gmail.com
                 </div>
-                <button
-                  onClick={handleCopyEmail}
-                  className="flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-[#10141E] border border-[rgba(255,255,255,0.08)] text-xs text-[#94A3B8] hover:text-[#F8FAFC] transition-colors"
-                >
-                  {copiedEmail ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copiedEmail ? 'COPIED TO CLIPBOARD' : 'COPY EMAIL ADDRESS'}</span>
-                </button>
+                <div className="flex flex-wrap items-center gap-2 pt-1">
+                  <a
+                    href="mailto:ankit.kr.dev@gmail.com"
+                    onMouseEnter={() => onCursorHover(true, 'EMAIL', 'button')}
+                    onMouseLeave={() => onCursorHover(false)}
+                    className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-[#78AFFF] text-[#030407] text-xs font-bold uppercase hover:bg-[#B7D7FF] transition-all"
+                  >
+                    <span>START A CONVERSATION</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </a>
+                  <button
+                    onClick={handleCopyEmail}
+                    className="flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-[#10141E] border border-[rgba(255,255,255,0.08)] text-xs text-[#94A3B8] hover:text-[#F8FAFC] transition-colors"
+                  >
+                    {copiedEmail ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedEmail ? 'COPIED' : 'COPY'}</span>
+                  </button>
+                </div>
               </div>
 
               {/* GitHub Link */}

@@ -34,6 +34,23 @@ export function App() {
   // Custom Cursor Hook
   const { cursor, setCursorHover } = useCustomCursor();
 
+  // Global Keyboard Shortcuts (⌘K / Ctrl+K for Palette, ⌘` / Ctrl+` for Terminal)
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setCommandPaletteOpen((prev) => !prev);
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key === '`') {
+        e.preventDefault();
+        setTerminalOpen((prev) => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <div className="relative min-h-screen bg-[#030407] text-[#F8FAFC] font-sans selection:bg-[#78AFFF] selection:text-[#030407]">
       {/* Top System Scroll Progress Indicator */}

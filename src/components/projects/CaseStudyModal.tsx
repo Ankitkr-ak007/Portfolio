@@ -44,10 +44,10 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
       />
 
       {/* Dedicated Modal Scroll Container */}
-      <OverlayScrollArea className="relative z-10 flex items-center justify-center p-4 sm:p-6 lg:p-10">
+      <OverlayScrollArea className="relative z-10 flex items-start justify-center p-4 sm:p-6 lg:p-10 min-h-full">
         <motion.div
           layoutId={`project-card-${project.id}`}
-          className="relative w-full max-w-5xl bg-[#0A0D14] border border-[rgba(120,175,255,0.25)] rounded-2xl p-6 sm:p-10 shadow-[0_0_90px_rgba(0,0,0,0.95)] my-auto max-h-[90dvh] overflow-y-auto overscroll-contain"
+          className="relative w-full max-w-5xl bg-[#0A0D14] border border-[rgba(120,175,255,0.25)] rounded-2xl p-6 sm:p-10 shadow-[0_0_90px_rgba(0,0,0,0.95)] my-8"
         >
           {/* Top Metadata Bar */}
           <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.07)] pb-6 mb-8">
