@@ -6,27 +6,27 @@ interface SystemsCoreSceneProps {
   mousePos?: { x: number; y: number };
 }
 
-// Static Float32Array particle positions generator (180 particles)
-const PARTICLE_COUNT = 180;
+const PARTICLE_COUNT = 200;
 function createParticlePositions(count: number): Float32Array {
   const positions = new Float32Array(count * 3);
   for (let i = 0; i < count; i++) {
-    positions[i * 3] = (Math.random() - 0.5) * 11;
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 11;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 11;
+    positions[i * 3] = (Math.random() - 0.5) * 12;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 12;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 12;
   }
   return positions;
 }
 
 export const SystemsCoreScene: React.FC<SystemsCoreSceneProps> = ({ mousePos = { x: 0, y: 0 } }) => {
   const coreRef = useRef<THREE.Group>(null);
-  const outerRingRef = useRef<THREE.Mesh>(null);
+  const ring1Ref = useRef<THREE.Mesh>(null);
+  const ring2Ref = useRef<THREE.Mesh>(null);
+  const ring3Ref = useRef<THREE.Mesh>(null);
   const particlesRef = useRef<THREE.Points>(null);
+  const orbitalNodesRef = useRef<THREE.Group>(null);
 
-  // Time tracking for float animation without THREE.Clock deprecation
   const timeRef = useRef(0);
 
-  // Check reduced motion
   const isReducedMotion = useMemo(
     () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     []
@@ -40,74 +40,111 @@ export const SystemsCoreScene: React.FC<SystemsCoreSceneProps> = ({ mousePos = {
     timeRef.current += delta;
 
     if (coreRef.current) {
-      // Procedural floating oscillation
-      coreRef.current.position.y = Math.sin(timeRef.current * 1.5) * 0.15;
+      // Floating physical oscillation
+      coreRef.current.position.y = Math.sin(timeRef.current * 1.4) * 0.12;
 
-      coreRef.current.rotation.y += delta * 0.22;
+      // Base continuous rotation
+      coreRef.current.rotation.y += delta * 0.25;
       coreRef.current.rotation.x += delta * 0.12;
-      
-      // Mouse parallax
-      coreRef.current.rotation.y += mousePos.x * 0.04 * delta;
-      coreRef.current.rotation.x += mousePos.y * 0.04 * delta;
+
+      // Smooth mouse parallax damping
+      coreRef.current.rotation.y += (mousePos.x * 0.4 - coreRef.current.rotation.y * 0.05) * delta;
+      coreRef.current.rotation.x += (-mousePos.y * 0.4 - coreRef.current.rotation.x * 0.05) * delta;
     }
 
-    if (outerRingRef.current) {
-      outerRingRef.current.rotation.z -= delta * 0.18;
-      outerRingRef.current.rotation.x += delta * 0.08;
+    if (ring1Ref.current) {
+      ring1Ref.current.rotation.z -= delta * 0.2;
+      ring1Ref.current.rotation.x += delta * 0.08;
+    }
+
+    if (ring2Ref.current) {
+      ring2Ref.current.rotation.y += delta * 0.22;
+      ring2Ref.current.rotation.z += delta * 0.12;
+    }
+
+    if (ring3Ref.current) {
+      ring3Ref.current.rotation.x -= delta * 0.18;
+    }
+
+    if (orbitalNodesRef.current) {
+      orbitalNodesRef.current.rotation.y += delta * 0.3;
     }
 
     if (particlesRef.current) {
-      particlesRef.current.rotation.y += delta * 0.04;
+      particlesRef.current.rotation.y += delta * 0.035;
     }
   });
 
   return (
     <group>
-      {/* Balanced Lighting */}
-      <ambientLight intensity={0.4} />
-      <directionalLight position={[10, 10, 5]} intensity={1.2} color="#B7D7FF" />
-      <pointLight position={[-10, -10, -5]} intensity={0.8} color="#78AFFF" />
+      {/* Volumetric Atmosphere Lights */}
+      <ambientLight intensity={0.45} />
+      <directionalLight position={[10, 12, 6]} intensity={1.4} color="#B7D7FF" />
+      <pointLight position={[-8, -8, -6]} intensity={0.9} color="#78AFFF" />
+      <pointLight position={[0, 4, -4]} intensity={0.6} color="#38BDF8" />
 
-      {/* Main Core Group */}
+      {/* Main Core Architecture */}
       <group ref={coreRef}>
-        {/* Inner Crystalline Processor */}
+        {/* Layer 1: Inner Crystalline Core */}
         <mesh>
-          <icosahedronGeometry args={[1.6, 0]} />
+          <icosahedronGeometry args={[1.5, 0]} />
           <meshStandardMaterial
-            color="#0A0D12"
+            color="#0A0D14"
             emissive="#78AFFF"
-            emissiveIntensity={0.35}
-            roughness={0.2}
-            metalness={0.9}
+            emissiveIntensity={0.45}
+            roughness={0.15}
+            metalness={0.92}
           />
         </mesh>
 
-        {/* Wireframe Holographic Geometry */}
+        {/* Layer 2: Wireframe Structural Cage */}
         <mesh>
-          <icosahedronGeometry args={[1.62, 1]} />
-          <meshBasicMaterial color="#78AFFF" wireframe transparent opacity={0.3} />
+          <icosahedronGeometry args={[1.52, 1]} />
+          <meshBasicMaterial color="#78AFFF" wireframe transparent opacity={0.32} />
         </mesh>
 
-        {/* Glowing Center Core */}
+        {/* Layer 3: Glowing Inner Energy Sphere */}
         <mesh>
-          <sphereGeometry args={[0.7, 32, 32]} />
+          <sphereGeometry args={[0.65, 32, 32]} />
           <meshBasicMaterial color="#B7D7FF" />
         </mesh>
 
-        {/* Orbiting Ring 1 */}
-        <mesh ref={outerRingRef}>
-          <torusGeometry args={[2.5, 0.02, 16, 80]} />
-          <meshBasicMaterial color="#78AFFF" transparent opacity={0.6} />
+        {/* Layer 4: Orbital Ring 1 (Electric Blue) */}
+        <mesh ref={ring1Ref}>
+          <torusGeometry args={[2.4, 0.022, 16, 90]} />
+          <meshBasicMaterial color="#78AFFF" transparent opacity={0.65} />
         </mesh>
 
-        {/* Orbiting Ring 2 */}
-        <mesh rotation={[Math.PI / 3, 0, Math.PI / 4]}>
-          <torusGeometry args={[3.2, 0.015, 16, 80]} />
-          <meshBasicMaterial color="#B7D7FF" transparent opacity={0.4} />
+        {/* Layer 5: Orbital Ring 2 (Secondary Glow) */}
+        <mesh ref={ring2Ref} rotation={[Math.PI / 3, 0, Math.PI / 4]}>
+          <torusGeometry args={[3.0, 0.016, 16, 90]} />
+          <meshBasicMaterial color="#B7D7FF" transparent opacity={0.45} />
         </mesh>
+
+        {/* Layer 6: Outer Boundary Ring */}
+        <mesh ref={ring3Ref} rotation={[-Math.PI / 4, Math.PI / 6, 0]}>
+          <torusGeometry args={[3.5, 0.012, 16, 90]} />
+          <meshBasicMaterial color="#38BDF8" transparent opacity={0.3} />
+        </mesh>
+
+        {/* Layer 7: Orbiting Data Nodes */}
+        <group ref={orbitalNodesRef}>
+          <mesh position={[2.4, 0, 0]}>
+            <sphereGeometry args={[0.08, 16, 16]} />
+            <meshBasicMaterial color="#78AFFF" />
+          </mesh>
+          <mesh position={[-2.4, 0, 0]}>
+            <sphereGeometry args={[0.08, 16, 16]} />
+            <meshBasicMaterial color="#B7D7FF" />
+          </mesh>
+          <mesh position={[0, 2.4, 0]}>
+            <sphereGeometry args={[0.06, 16, 16]} />
+            <meshBasicMaterial color="#38BDF8" />
+          </mesh>
+        </group>
       </group>
 
-      {/* Background Particle Cloud */}
+      {/* Dynamic Background Particle Field */}
       <points ref={particlesRef}>
         <bufferGeometry>
           <bufferAttribute

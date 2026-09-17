@@ -9,18 +9,21 @@
 * **Missing Documentation**: None (All 19 AI docs present)
 * **Documentation Drift Status**: HEALTHY — All core knowledge documents verified
 
-## 2. CODEBASE TODO / FIXME AUDIT (10 Detected)
+## 2. CODEBASE TODO / FIXME AUDIT (13 Detected)
 
 | Severity | Type | File Location | Snippet / Context |
 | :--- | :--- | :--- | :--- |
 | INFO | HACK | `package-lock.json:2727` | `"url": "https://github.com/sponsors/colinhacks"` |
-| INFO | PLACEHOLDER | `src/components/about/PortraitModule.tsx:25` | `{/* Portrait Placeholder Avatar */}` |
-| INFO | PLACEHOLDER | `src/components/contact/ContactSection.tsx:76` | `placeholder="Ankit Kumar"` |
-| INFO | PLACEHOLDER | `src/components/contact/ContactSection.tsx:79` | `className="w-full p-4 rounded-xl bg-[#050609] border border-[rgba(255,255,255,0.08)] text-sm text-[#F5F7FA] placeholder-[#596170] focus:border-[#78AFFF] focus:outline-none transition-colors"` |
-| INFO | PLACEHOLDER | `src/components/contact/ContactSection.tsx:88` | `placeholder="ankit@example.com"` |
-| INFO | PLACEHOLDER | `src/components/contact/ContactSection.tsx:91` | `className="w-full p-4 rounded-xl bg-[#050609] border border-[rgba(255,255,255,0.08)] text-sm text-[#F5F7FA] placeholder-[#596170] focus:border-[#78AFFF] focus:outline-none transition-colors"` |
-| INFO | PLACEHOLDER | `src/components/contact/ContactSection.tsx:100` | `placeholder="Tell me about your project or opportunity..."` |
-| INFO | PLACEHOLDER | `src/components/contact/ContactSection.tsx:103` | `className="w-full p-4 rounded-xl bg-[#050609] border border-[rgba(255,255,255,0.08)] text-sm text-[#F5F7FA] placeholder-[#596170] focus:border-[#78AFFF] focus:outline-none transition-colors"` |
+| INFO | PLACEHOLDER | `src/components/about/PortraitModule.tsx:25` | `{/* Central Portrait Placeholder Avatar with Glowing Ring */}` |
+| INFO | PLACEHOLDER | `src/components/contact/ContactSection.tsx:102` | `placeholder="Ankit Kumar"` |
+| INFO | PLACEHOLDER | `src/components/contact/ContactSection.tsx:105` | `className="w-full p-4 rounded-xl bg-[#030407] border border-[rgba(255,255,255,0.08)] text-sm text-[#F8FAFC] placeholder-[#475569] focus:border-[#78AFFF] focus:outline-none transition-colors"` |
+| INFO | PLACEHOLDER | `src/components/contact/ContactSection.tsx:114` | `placeholder="ankit@example.com"` |
+| INFO | PLACEHOLDER | `src/components/contact/ContactSection.tsx:117` | `className="w-full p-4 rounded-xl bg-[#030407] border border-[rgba(255,255,255,0.08)] text-sm text-[#F8FAFC] placeholder-[#475569] focus:border-[#78AFFF] focus:outline-none transition-colors"` |
+| INFO | PLACEHOLDER | `src/components/contact/ContactSection.tsx:126` | `placeholder="Tell me about your project, system architecture, or opportunity..."` |
+| INFO | PLACEHOLDER | `src/components/contact/ContactSection.tsx:129` | `className="w-full p-4 rounded-xl bg-[#030407] border border-[rgba(255,255,255,0.08)] text-sm text-[#F8FAFC] placeholder-[#475569] focus:border-[#78AFFF] focus:outline-none transition-colors"` |
+| INFO | TEMP | `src/components/insight/AiVsEngineering.tsx:9` | `attempt: usize,` |
+| INFO | TEMP | `src/components/insight/AiVsEngineering.tsx:17` | `Err(schema_err) if attempt < MAX_RETRY_COUNT => {` |
+| INFO | TEMP | `src/components/insight/AiVsEngineering.tsx:21` | `execute_agent_step(&repaired_completion, attempt + 1).await` |
 | INFO | PLACEHOLDER | `src/components/ui/CommandPalette.tsx:91` | `placeholder="Type a command or search..."` |
 | INFO | PLACEHOLDER | `src/components/ui/CommandPalette.tsx:94` | `className="w-full py-4 bg-transparent text-sm text-[#F5F7FA] placeholder-[#596170] focus:outline-none"` |
 

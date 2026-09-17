@@ -1,12 +1,14 @@
 import React, { useState, Suspense, lazy } from 'react';
 import { useLenis } from './hooks/useLenis';
 import { useCustomCursor } from './hooks/useCustomCursor';
+import { ScrollProgress } from './components/motion/ScrollProgress';
 import { Preloader } from './components/ui/Preloader';
 import { CustomCursor } from './components/layout/CustomCursor';
 import { Header } from './components/layout/Header';
 import { Hero } from './components/hero/Hero';
 import { TechStrip } from './components/ui/TechStrip';
 import { EditorialIntro } from './components/ui/EditorialIntro';
+import { HorizontalProcess } from './components/engineering/HorizontalProcess';
 import { SelectedWork } from './components/projects/SelectedWork';
 import { HowIThink } from './components/engineering/HowIThink';
 import { ExperienceTimeline } from './components/experience/ExperienceTimeline';
@@ -14,7 +16,7 @@ import { AboutSection } from './components/about/AboutSection';
 import { ContactSection } from './components/contact/ContactSection';
 import { Footer } from './components/layout/Footer';
 
-// Lazy loaded components for optimized chunk loading
+// Lazy loaded components for optimized chunk loading & performance
 const LabSection = lazy(() => import('./components/lab/LabSection').then((m) => ({ default: m.LabSection })));
 const AiVsEngineering = lazy(() => import('./components/insight/AiVsEngineering').then((m) => ({ default: m.AiVsEngineering })));
 const AiPhilosophyBanner = lazy(() => import('./components/insight/AiPhilosophyBanner').then((m) => ({ default: m.AiPhilosophyBanner })));
@@ -25,14 +27,17 @@ export function App() {
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [terminalOpen, setTerminalOpen] = useState(false);
 
-  // Initialize smooth scroll
+  // Initialize Lenis smooth scroll engine
   useLenis();
 
   // Custom Cursor Hook
   const { cursor, setCursorHover } = useCustomCursor();
 
   return (
-    <div className="relative min-h-screen bg-[#050609] text-[#F5F7FA] font-sans selection:bg-[#78AFFF] selection:text-[#050609]">
+    <div className="relative min-h-screen bg-[#030407] text-[#F8FAFC] font-sans selection:bg-[#78AFFF] selection:text-[#030407]">
+      {/* Top System Scroll Progress Indicator */}
+      <ScrollProgress />
+
       {/* Preloader opening sequence */}
       <Preloader onComplete={() => {}} />
 
@@ -40,16 +45,16 @@ export function App() {
       <CustomCursor cursorState={cursor} />
 
       {/* Global Grain Texture & Background Grid */}
-      <div className="fixed inset-0 bg-grain opacity-30 pointer-events-none z-[1]" aria-hidden="true" />
+      <div className="fixed inset-0 bg-grain opacity-35 pointer-events-none z-[1]" aria-hidden="true" />
 
-      {/* Header Navigation */}
+      {/* Floating Command Nav Header */}
       <Header
         onOpenCommandPalette={() => setCommandPaletteOpen(true)}
         onOpenTerminal={() => setTerminalOpen(true)}
         onCursorHover={setCursorHover}
       />
 
-      {/* Main Page Content */}
+      {/* Main Page Narrative Flow */}
       <main className="relative z-10">
         <Hero
           onCursorHover={setCursorHover}
@@ -57,12 +62,13 @@ export function App() {
         />
         <TechStrip />
         <EditorialIntro />
+        <HorizontalProcess />
         <SelectedWork onCursorHover={setCursorHover} />
         <HowIThink />
         <ExperienceTimeline />
 
-        {/* Lazy Loaded Below-The-Fold Sections */}
-        <Suspense fallback={<div className="py-20 text-center font-mono text-xs text-[#596170]">LOADING LAB...</div>}>
+        {/* Below-The-Fold Interactive Modules */}
+        <Suspense fallback={<div className="py-20 text-center font-mono text-xs text-[#475569]">INITIALIZING LAB MODULES...</div>}>
           <LabSection />
           <AiVsEngineering />
           <AiPhilosophyBanner />
@@ -75,7 +81,7 @@ export function App() {
       {/* Footer */}
       <Footer onCursorHover={setCursorHover} />
 
-      {/* Command Palette (Ctrl+K) */}
+      {/* Command Palette (Ctrl+K / ⌘K) */}
       <Suspense fallback={null}>
         <CommandPalette
           isOpen={commandPaletteOpen}
@@ -84,7 +90,7 @@ export function App() {
         />
       </Suspense>
 
-      {/* Terminal Shell */}
+      {/* Terminal CLI Shell */}
       <Suspense fallback={null}>
         <Terminal
           isOpen={terminalOpen}

@@ -1,8 +1,10 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { X, ExternalLink, Cpu, ShieldCheck, Layers, CheckCircle2 } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { motion } from 'motion/react';
+import { X, ExternalLink, Cpu, ShieldCheck, Layers, CheckCircle2, Lightbulb, GitBranch } from 'lucide-react';
 import type { Project } from '../../data/projects';
 import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
+import { Project3DVisual } from '../3d/Project3DVisual';
+import { BrandIcon } from '../ui/BrandIcons';
 
 interface CaseStudyModalProps {
   project: Project | null;
@@ -17,169 +19,210 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
 }) => {
   useBodyScrollLock(!!project);
 
-  if (!project || !project.caseStudy) return null;
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
-  const { problem, approach, architecture, challenges, outcome } = project.caseStudy;
+  if (!project) return null;
+
+  const { overview, problem, system, architecture, decisions, challenges, outcomes, learnings } = project.caseStudy;
 
   return (
-    <AnimatePresence>
+    <div
+      className="fixed inset-0 z-50 h-[100dvh] w-full overflow-hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-label={project.title}
+    >
+      {/* Backdrop */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        className="fixed inset-0 bg-[#030407]/90 backdrop-blur-2xl"
+      />
+
+      {/* Dedicated Modal Scroll Container */}
       <div
-        className="fixed inset-0 z-50 h-[100dvh] w-full overflow-hidden"
-        role="dialog"
-        aria-modal="true"
-        aria-label={project.title}
+        data-lenis-prevent="true"
+        data-lenis-prevent-touch="true"
+        onWheel={(e) => e.stopPropagation()}
+        className="relative z-10 h-[100dvh] w-full overflow-y-auto overflow-x-hidden overscroll-contain flex items-center justify-center p-4 sm:p-6 lg:p-10"
       >
-        {/* Backdrop */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={onClose}
-          className="fixed inset-0 bg-[#050609]/88 backdrop-blur-xl"
-        />
-
-        {/* Dedicated Modal Scroll Surface */}
-        <div
-          data-lenis-prevent="true"
-          data-lenis-prevent-touch="true"
-          onWheel={(e) => e.stopPropagation()}
-          className="relative z-10 h-[100dvh] w-full overflow-y-auto overflow-x-hidden overscroll-contain flex items-center justify-center p-4 sm:p-6 lg:p-10"
+          layoutId={`project-card-${project.id}`}
+          className="relative w-full max-w-5xl bg-[#0A0D14] border border-[rgba(120,175,255,0.25)] rounded-2xl p-6 sm:p-10 shadow-[0_0_90px_rgba(0,0,0,0.95)] my-auto max-h-[90dvh] overflow-y-auto overscroll-contain"
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: 20 }}
-            transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-            className="relative w-full max-w-5xl bg-[#0A0D12] border border-[rgba(120,175,255,0.2)] rounded-2xl p-6 sm:p-10 shadow-[0_0_80px_rgba(0,0,0,0.95)] my-auto max-h-[90dvh] overflow-y-auto overscroll-contain"
-          >
-            {/* Top Bar */}
-            <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.08)] pb-6 mb-8">
-              <div className="flex items-center space-x-3 font-mono text-xs text-[#78AFFF]">
-                <span className="px-2.5 py-1 rounded bg-[#10141B] border border-[rgba(120,175,255,0.3)]">
-                  PROJECT // {project.number}
-                </span>
-                <span className="text-[#9BA4B2]">{project.category}</span>
-              </div>
+          {/* Top Metadata Bar */}
+          <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.07)] pb-6 mb-8">
+            <div className="flex items-center space-x-3 font-mono text-xs text-[#78AFFF]">
+              <span className="px-2.5 py-1 rounded-md bg-[#10141E] border border-[rgba(120,175,255,0.3)] font-bold">
+                SYSTEM // {project.number}
+              </span>
+              <span className="text-[#94A3B8]">{project.category}</span>
+              <span className="text-[#475569]">·</span>
+              <span className="text-[#475569]">{project.year}</span>
+            </div>
 
-              <button
-                onClick={onClose}
-                aria-label="Close case study"
-                onMouseEnter={() => onCursorHover(true, 'CLOSE', 'button')}
-                onMouseLeave={() => onCursorHover(false)}
-                className="p-2 rounded-lg bg-[#10141B] border border-[rgba(255,255,255,0.1)] text-[#9BA4B2] hover:text-[#F5F7FA] hover:border-[#78AFFF] transition-all"
+            <button
+              onClick={onClose}
+              aria-label="Close case study"
+              onMouseEnter={() => onCursorHover(true, 'CLOSE', 'button')}
+              onMouseLeave={() => onCursorHover(false)}
+              className="p-2 rounded-xl bg-[#10141E] border border-[rgba(255,255,255,0.1)] text-[#94A3B8] hover:text-[#F8FAFC] hover:border-[#78AFFF] transition-all"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* 3D Header Visual & Title */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-10 pb-8 border-b border-[rgba(255,255,255,0.06)]">
+            <div className="lg:col-span-8 space-y-4">
+              <motion.h2
+                layoutId={`project-title-${project.id}`}
+                className="text-3xl sm:text-5xl font-black uppercase text-[#F8FAFC] tracking-tight"
               >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Header Title */}
-            <div className="mb-8 space-y-3">
-              <h2 className="text-3xl sm:text-5xl font-black uppercase text-[#F5F7FA] tracking-tight">
                 {project.title}
-              </h2>
-              <p className="text-lg text-[#9BA4B2] max-w-3xl font-normal leading-relaxed">
-                {project.description}
+              </motion.h2>
+              <p className="text-base sm:text-lg text-[#94A3B8] max-w-3xl leading-relaxed">
+                {overview}
               </p>
-            </div>
-
-            {/* Tech Badges */}
-            <div className="flex flex-wrap gap-2 mb-10">
-              {project.technologies.map((tech) => (
-                <span
-                  key={tech}
-                  className="px-3 py-1 rounded-md bg-[#10141B] border border-[rgba(255,255,255,0.08)] font-mono text-xs text-[#B7D7FF]"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-
-            {/* Grid Layout: Problem & Approach */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-              <div className="p-6 rounded-xl bg-[#10141B]/60 border border-[rgba(255,255,255,0.06)] space-y-3">
-                <div className="flex items-center space-x-2 text-xs font-mono text-[#78AFFF] uppercase tracking-wider">
-                  <Cpu className="w-4 h-4" />
-                  <span>01 // THE PROBLEM STATEMENT</span>
-                </div>
-                <p className="text-sm text-[#9BA4B2] leading-relaxed">
-                  {problem}
-                </p>
-              </div>
-
-              <div className="p-6 rounded-xl bg-[#10141B]/60 border border-[rgba(255,255,255,0.06)] space-y-3">
-                <div className="flex items-center space-x-2 text-xs font-mono text-[#B7D7FF] uppercase tracking-wider">
-                  <ShieldCheck className="w-4 h-4" />
-                  <span>02 // ENGINEERING APPROACH</span>
-                </div>
-                <p className="text-sm text-[#9BA4B2] leading-relaxed">
-                  {approach}
-                </p>
-              </div>
-            </div>
-
-            {/* Architecture Box */}
-            <div className="p-6 rounded-xl bg-gradient-to-r from-[#10141B] to-[#0A0D12] border border-[rgba(120,175,255,0.2)] mb-10 space-y-4">
-              <div className="flex items-center space-x-2 text-xs font-mono text-[#78AFFF] uppercase tracking-wider">
-                <Layers className="w-4 h-4" />
-                <span>03 // SYSTEM ARCHITECTURE FLOW</span>
-              </div>
-              <div className="p-4 rounded-lg bg-[#050609] border border-[rgba(255,255,255,0.08)] font-mono text-xs text-[#B7D7FF] overflow-x-auto">
-                <code>{architecture}</code>
-              </div>
-            </div>
-
-            {/* Key Challenges */}
-            <div className="mb-10 space-y-4">
-              <h3 className="font-mono text-xs text-[#596170] uppercase tracking-widest">
-                04 // TECHNICAL CHALLENGES OVERCOME
-              </h3>
-              <div className="grid grid-cols-1 gap-3">
-                {challenges.map((c, i) => (
-                  <div key={i} className="flex items-start space-x-3 p-3.5 rounded-lg bg-[#10141B]/40 border border-[rgba(255,255,255,0.04)]">
-                    <CheckCircle2 className="w-4 h-4 text-[#78AFFF] mt-0.5 shrink-0" />
-                    <span className="text-sm text-[#9BA4B2]">{c}</span>
-                  </div>
+              
+              {/* Tech Badges with Brand Icons */}
+              <div className="flex flex-wrap gap-2 pt-2">
+                {project.technologies.map((tech) => (
+                  <span
+                    key={tech}
+                    className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg bg-[#10141E] border border-[rgba(255,255,255,0.07)] font-mono text-xs text-[#B7D7FF]"
+                  >
+                    <BrandIcon name={tech} className="w-3.5 h-3.5 text-[#78AFFF]" />
+                    <span>{tech}</span>
+                  </span>
                 ))}
               </div>
             </div>
 
-            {/* Outcome */}
-            <div className="p-6 rounded-xl bg-[rgba(120,175,255,0.05)] border border-[rgba(120,175,255,0.2)] mb-10 space-y-2">
-              <div className="font-mono text-xs text-[#78AFFF] uppercase">05 // MEASURABLE OUTCOME</div>
-              <p className="text-base text-[#F5F7FA] font-medium">
-                {outcome}
+            <div className="lg:col-span-4 h-48 sm:h-56 rounded-xl bg-[#10141E] border border-[rgba(255,255,255,0.06)] flex items-center justify-center relative overflow-hidden">
+              <Project3DVisual type={project.hero3D} />
+            </div>
+          </div>
+
+          {/* Section 02: Problem & System Approach */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div className="p-6 rounded-xl bg-[#10141E]/70 border border-[rgba(255,255,255,0.06)] space-y-3">
+              <div className="flex items-center space-x-2 text-xs font-mono text-[#78AFFF] uppercase tracking-wider">
+                <Cpu className="w-4 h-4" />
+                <span>01 // THE PROBLEM STATEMENT</span>
+              </div>
+              <p className="text-sm text-[#94A3B8] leading-relaxed">
+                {problem}
               </p>
             </div>
 
-            {/* Footer Actions */}
-            <div className="flex items-center justify-between border-t border-[rgba(255,255,255,0.08)] pt-6">
-              {project.githubUrl && (
-                <a
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onMouseEnter={() => onCursorHover(true, 'GITHUB', 'button')}
-                  onMouseLeave={() => onCursorHover(false)}
-                  className="flex items-center space-x-2 px-5 py-2.5 rounded-lg bg-[#10141B] border border-[rgba(255,255,255,0.1)] hover:border-[#78AFFF] text-xs font-mono text-[#F5F7FA] transition-all"
-                >
-                  <svg className="w-4 h-4 fill-current text-[#78AFFF]" viewBox="0 0 24 24">
-                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-                  </svg>
-                  <span>VIEW REPOSITORY</span>
-                  <ExternalLink className="w-3.5 h-3.5 text-[#596170]" />
-                </a>
-              )}
-
-              <button
-                onClick={onClose}
-                className="px-5 py-2.5 rounded-lg bg-[#78AFFF] text-[#050609] font-mono text-xs font-bold uppercase tracking-wider hover:bg-[#B7D7FF] transition-all"
-              >
-                CLOSE CASE STUDY
-              </button>
+            <div className="p-6 rounded-xl bg-[#10141E]/70 border border-[rgba(255,255,255,0.06)] space-y-3">
+              <div className="flex items-center space-x-2 text-xs font-mono text-[#B7D7FF] uppercase tracking-wider">
+                <ShieldCheck className="w-4 h-4" />
+                <span>02 // THE SYSTEM ARCHITECTURE</span>
+              </div>
+              <p className="text-sm text-[#94A3B8] leading-relaxed">
+                {system}
+              </p>
             </div>
-          </motion.div>
-        </div>
+          </div>
+
+          {/* Section 03: Architecture Flow Diagram */}
+          <div className="p-6 rounded-xl bg-gradient-to-r from-[#10141E] to-[#0A0D14] border border-[rgba(120,175,255,0.25)] mb-8 space-y-3">
+            <div className="flex items-center space-x-2 text-xs font-mono text-[#78AFFF] uppercase tracking-wider">
+              <Layers className="w-4 h-4" />
+              <span>03 // DATA & EXECUTION FLOW</span>
+            </div>
+            <div className="p-4 rounded-lg bg-[#030407] border border-[rgba(255,255,255,0.08)] font-mono text-xs text-[#B7D7FF] overflow-x-auto leading-relaxed">
+              <code>{architecture}</code>
+            </div>
+          </div>
+
+          {/* Section 04: Key Engineering Decisions */}
+          <div className="mb-8 space-y-3">
+            <div className="flex items-center space-x-2 font-mono text-xs text-[#78AFFF] uppercase tracking-widest">
+              <GitBranch className="w-4 h-4" />
+              <span>04 // ARCHITECTURAL DECISIONS</span>
+            </div>
+            <div className="grid grid-cols-1 gap-2.5">
+              {decisions.map((dec, i) => (
+                <div key={i} className="flex items-start space-x-3 p-4 rounded-xl bg-[#10141E]/40 border border-[rgba(255,255,255,0.04)] text-sm text-[#94A3B8]">
+                  <span className="font-mono text-xs text-[#78AFFF] font-bold mt-0.5">0{i + 1}</span>
+                  <span>{dec}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Section 05: Challenges Overcome */}
+          <div className="mb-8 space-y-3">
+            <div className="font-mono text-xs text-[#475569] uppercase tracking-widest">
+              05 // TECHNICAL CHALLENGES OVERCOME
+            </div>
+            <div className="grid grid-cols-1 gap-2.5">
+              {challenges.map((c, i) => (
+                <div key={i} className="flex items-start space-x-3 p-4 rounded-xl bg-[#10141E]/40 border border-[rgba(255,255,255,0.04)]">
+                  <CheckCircle2 className="w-4 h-4 text-[#78AFFF] mt-0.5 shrink-0" />
+                  <span className="text-sm text-[#94A3B8]">{c}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Section 06 & 07: Outcomes and Learnings */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div className="p-6 rounded-xl bg-[rgba(120,175,255,0.06)] border border-[rgba(120,175,255,0.2)] space-y-2">
+              <div className="font-mono text-xs text-[#78AFFF] uppercase">06 // MEASURABLE OUTCOME</div>
+              <p className="text-sm text-[#F8FAFC] font-medium leading-relaxed">
+                {outcomes}
+              </p>
+            </div>
+
+            <div className="p-6 rounded-xl bg-[#10141E]/70 border border-[rgba(255,255,255,0.06)] space-y-2">
+              <div className="font-mono text-xs text-[#F59E0B] uppercase flex items-center space-x-1.5">
+                <Lightbulb className="w-3.5 h-3.5" />
+                <span>07 // KEY LESSONS LEARNED</span>
+              </div>
+              <p className="text-sm text-[#94A3B8] leading-relaxed">
+                {learnings}
+              </p>
+            </div>
+          </div>
+
+          {/* Modal Footer Actions */}
+          <div className="flex items-center justify-between border-t border-[rgba(255,255,255,0.07)] pt-6">
+            {project.githubUrl && (
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onMouseEnter={() => onCursorHover(true, 'GITHUB', 'button')}
+                onMouseLeave={() => onCursorHover(false)}
+                className="flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-[#10141E] border border-[rgba(255,255,255,0.1)] hover:border-[#78AFFF] text-xs font-mono text-[#F8FAFC] transition-all"
+              >
+                <BrandIcon name="github" className="w-4 h-4 text-[#78AFFF]" />
+                <span>VIEW REPOSITORY</span>
+                <ExternalLink className="w-3.5 h-3.5 text-[#475569]" />
+              </a>
+            )}
+
+            <button
+              onClick={onClose}
+              className="px-6 py-2.5 rounded-xl bg-[#78AFFF] text-[#030407] font-mono text-xs font-bold uppercase tracking-wider hover:bg-[#B7D7FF] transition-all"
+            >
+              CLOSE CASE STUDY
+            </button>
+          </div>
+        </motion.div>
       </div>
-    </AnimatePresence>
+    </div>
   );
 };

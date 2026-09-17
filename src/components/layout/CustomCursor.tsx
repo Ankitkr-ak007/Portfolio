@@ -13,11 +13,10 @@ export const CustomCursor: React.FC<CustomCursorProps> = ({ cursorState }) => {
     return window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   });
 
-  // High performance motion values
   const rawX = useMotionValue(-100);
   const rawY = useMotionValue(-100);
 
-  const springConfig = { damping: 28, stiffness: 320, mass: 0.5 };
+  const springConfig = { damping: 28, stiffness: 350, mass: 0.5 };
   const smoothX = useSpring(rawX, springConfig);
   const smoothY = useSpring(rawY, springConfig);
 
@@ -51,9 +50,9 @@ export const CustomCursor: React.FC<CustomCursorProps> = ({ cursorState }) => {
 
   return (
     <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden" aria-hidden="true">
-      {/* Primary Glowing Dot (Instant transform) */}
+      {/* Primary Glowing Precision Dot */}
       <motion.div
-        className="fixed left-0 top-0 h-2 w-2 rounded-full bg-[#78AFFF] shadow-[0_0_10px_#78AFFF]"
+        className="fixed left-0 top-0 h-2 w-2 rounded-full bg-[#78AFFF] shadow-[0_0_12px_#78AFFF]"
         style={{
           x: rawX,
           y: rawY,
@@ -62,13 +61,13 @@ export const CustomCursor: React.FC<CustomCursorProps> = ({ cursorState }) => {
         }}
       />
 
-      {/* Outer Ring / Interactive Label Bubble (Spring physics) */}
+      {/* Outer Spring Follower / Dynamic Label Bubble */}
       <motion.div
-        className={`fixed left-0 top-0 flex items-center justify-center rounded-full border border-[rgba(120,175,255,0.4)] backdrop-blur-[2px] transition-all duration-200 ${
+        className={`fixed left-0 top-0 flex items-center justify-center rounded-full border border-[rgba(120,175,255,0.35)] backdrop-blur-[2px] transition-all duration-200 ${
           isProject
-            ? 'h-24 w-24 bg-[rgba(10,13,18,0.88)] border-[#78AFFF] shadow-[0_0_25px_rgba(120,175,255,0.35)]'
+            ? 'h-24 w-24 bg-[rgba(10,13,20,0.9)] border-[#78AFFF] shadow-[0_0_30px_rgba(120,175,255,0.35)]'
             : isButton
-            ? 'h-14 w-14 bg-[rgba(120,175,255,0.15)] border-[#78AFFF]'
+            ? 'h-14 w-14 bg-[rgba(120,175,255,0.12)] border-[#78AFFF]'
             : cursorState.isHovered
             ? 'h-12 w-12 bg-[rgba(120,175,255,0.08)] border-[#78AFFF]'
             : 'h-8 w-8 bg-transparent'
