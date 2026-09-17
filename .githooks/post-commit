@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+# Event-driven AI memory post-commit trigger
+node scripts/ai/git-event.mjs post-commit

@@ -1,29 +1,34 @@
-import { execGit } from './utils.mjs';
+import { execGit, getHeadCommit, getShortHead, getCurrentBranch, isWorktreeDirty } from './utils.mjs';
 import { syncContext } from './sync-context.mjs';
+import { repairAiMemory } from './repair.mjs';
 import { validateContext } from './validate-context.mjs';
 
 export function sessionStart() {
   syncContext();
+  repairAiMemory();
   validateContext();
 
-  const shortHead = execGit('rev-parse --short HEAD', { fallback: 'UNKNOWN' });
-  const branch = execGit('rev-parse --abbrev-ref HEAD', { fallback: 'main' });
-  const status = execGit('status --porcelain', { fallback: '' });
-  const isDirty = status.length > 0;
+  const head = getHeadCommit();
+  const shortHead = getShortHead();
+  const branch = getCurrentBranch();
+  const isDirty = isWorktreeDirty();
+
+  const hooksPath = execGit('config core.hooksPath', { fallback: '' });
+  const hooksInstalled = hooksPath === '.githooks' || hooksPath.endsWith('.githooks');
 
   console.log(`
 ╭─────────────────────────────────────────────────────────────╮
 │              ANKIT KUMAR PORTFOLIO INTELLIGENCE              │
 ╰─────────────────────────────────────────────────────────────╯
 
-HEAD         ${shortHead}
+HEAD         ${shortHead} (${head})
 BRANCH       ${branch}
 STATUS       ${isDirty ? 'DIRTY (Uncommitted changes exist)' : 'CLEAN'}
+HOOKS        ${hooksInstalled ? 'ACTIVE (.githooks)' : '⚠️  MISSING (Run: npm run ai:install-hooks)'}
 
 CONTEXT      FRESH (Synced & Validated)
-ARCH         FRESH (docs/ai/ARCHITECTURE.md)
-DESIGN       FRESH (docs/ai/DESIGN_SYSTEM.md)
-GIT INDEX    FRESH (.ai/cache/git-index.json)
+RUNTIME      SYNCHRONIZED (.ai/runtime/current.json)
+GIT NOTE     ATTACHED (refs/notes/ai-context)
 
 REQUIRED READ ORDER BEFORE MODIFYING CODE:
 1. AGENTS.md (System Navigation Map)

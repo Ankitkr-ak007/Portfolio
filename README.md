@@ -169,6 +169,27 @@ npm run test:lighthouse
 
 ---
 
+## 🤖 Event-Driven AI Project Intelligence & Git Memory
+
+This repository maintains an event-driven AI memory layer where Git is the authoritative event source.
+
+Every Git commit automatically triggers:
+- Exact HEAD commit intelligence capture
+- Attachment of structured machine-readable **Git Notes** (`refs/notes/ai-context`)
+- Continuous synchronization of `.ai/runtime/current.json`
+- Commit snapshot indexing (`.ai/snapshots/<sha>.json`)
+- Documentation drift detection
+
+### Initializing AI Memory Hooks:
+```bash
+npm run ai:install-hooks  # Activates version-controlled .githooks
+npm run ai:hooks:status   # Verifies hook health status
+npm run ai:start          # Dynamically reads Git HEAD and initializes session
+npm run ai:health         # Validates Git == Runtime == Git Note invariant
+```
+
+---
+
 ## 📜 Documentation Index
 
 - [🏛️ System Architecture Deep-Dive](docs/ARCHITECTURE.md)

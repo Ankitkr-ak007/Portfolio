@@ -13,7 +13,8 @@ export function execGit(cmd, options = {}) {
       stdio: ['pipe', 'pipe', 'pipe'],
       ...options,
     }).trim();
-  } catch {
+  } catch (err) {
+    if (options.throwOnError) throw err;
     if (options.fallback !== undefined) return options.fallback;
     return '';
   }
@@ -23,6 +24,10 @@ export function getFileHash(filePath) {
   if (!fs.existsSync(filePath)) return '';
   const buffer = fs.readFileSync(filePath);
   return crypto.createHash('sha256').update(buffer).digest('hex');
+}
+
+export function getStringHash(str) {
+  return crypto.createHash('sha256').update(str || '').digest('hex');
 }
 
 export function readJson(filePath, defaultValue = null) {
@@ -40,7 +45,8 @@ export function writeJson(filePath, data) {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2) + '\n', 'utf-8');
+  const sanitized = sanitizeSecrets(data);
+  fs.writeFileSync(filePath, JSON.stringify(sanitized, null, 2) + '\n', 'utf-8');
 }
 
 export function readMarkdown(filePath) {
@@ -54,6 +60,86 @@ export function writeMarkdown(filePath, content) {
     fs.mkdirSync(dir, { recursive: true });
   }
   fs.writeFileSync(filePath, content, 'utf-8');
+}
+
+export function sanitizeSecrets(input) {
+  if (typeof input === 'string') {
+    return input
+      .replace(/sk-[a-zA-Z0-9_-]{20,}/g, '[REDACTED_SECRET]')
+      .replace(/AIza[0-9A-Za-z-_]{35}/g, '[REDACTED_API_KEY]')
+      .replace(/ghp_[a-zA-Z0-9]{36}/g, '[REDACTED_GITHUB_TOKEN]')
+      .replace(/github_pat_[a-zA-Z0-9_]{40,}/g, '[REDACTED_GITHUB_PAT]')
+      .replace(/(Bearer\s+)[a-zA-Z0-9._-]{20,}/gi, '$1[REDACTED_TOKEN]')
+      .replace(/(password|secret|token|api[_-]?key)\s*[:=]\s*["'][^"']+["']/gi, '$1="[REDACTED]"');
+  }
+  if (Array.isArray(input)) {
+    return input.map(item => sanitizeSecrets(item));
+  }
+  if (input !== null && typeof input === 'object') {
+    const output = {};
+    for (const [key, value] of Object.entries(input)) {
+      if (/password|secret|token|apikey|api_key|auth/i.test(key) && typeof value === 'string') {
+        output[key] = '[REDACTED]';
+      } else {
+        output[key] = sanitizeSecrets(value);
+      }
+    }
+    return output;
+  }
+  return input;
+}
+
+export function getRootCommit() {
+  const roots = execGit('rev-list --max-parents=0 HEAD', { fallback: '' });
+  if (roots) {
+    const list = roots.split('\n').filter(Boolean);
+    return list[0] || 'UNKNOWN';
+  }
+  return 'UNKNOWN';
+}
+
+export function getHeadCommit() {
+  return execGit('rev-parse HEAD', { fallback: 'UNKNOWN' });
+}
+
+export function getShortHead() {
+  return execGit('rev-parse --short HEAD', { fallback: 'UNKNOWN' });
+}
+
+export function getCurrentBranch() {
+  return execGit('rev-parse --abbrev-ref HEAD', { fallback: 'main' });
+}
+
+export function isWorktreeDirty() {
+  const status = execGit('status --porcelain', { fallback: '' });
+  return status.trim().length > 0;
+}
+
+export function getContextHashes() {
+  const docs = [
+    'docs/ai/PROJECT_CONTEXT.md',
+    'docs/ai/ARCHITECTURE.md',
+    'docs/ai/DESIGN_SYSTEM.md',
+    'docs/ai/ENGINEERING_RULES.md',
+    'docs/ai/PROJECT_STATE.md',
+  ];
+  const hashes = {};
+  for (const doc of docs) {
+    const full = path.join(ROOT_DIR, doc);
+    const key = path.basename(doc, '.md');
+    hashes[key] = getFileHash(full);
+  }
+  return hashes;
+}
+
+export function replaceGeneratedSection(fullContent, newGeneratedBlock) {
+  const beginMarker = '<!-- BEGIN GENERATED -->';
+  const endMarker = '<!-- END GENERATED -->';
+  if (!fullContent.includes(beginMarker) || !fullContent.includes(endMarker)) {
+    return fullContent;
+  }
+  const regex = new RegExp(`${beginMarker}[\\s\\S]*?${endMarker}`, 'g');
+  return fullContent.replace(regex, `${beginMarker}\n${newGeneratedBlock.trim()}\n${endMarker}`);
 }
 
 export function preserveHumanSections(existingContent, newGeneratedContent) {
@@ -81,7 +167,11 @@ export function preserveHumanSections(existingContent, newGeneratedContent) {
   return result;
 }
 
-export function scanDirectory(dirPath, ignoreList = ['node_modules', '.git', 'dist', 'build', '.ai/cache']) {
+export function isStrictMode() {
+  return process.env.AI_STRICT === '1' || process.env.AI_STRICT === 'true';
+}
+
+export function scanDirectory(dirPath, ignoreList = ['node_modules', '.git', 'dist', 'build', '.ai/cache', '.ai/runtime']) {
   const results = [];
   if (!fs.existsSync(dirPath)) return results;
 

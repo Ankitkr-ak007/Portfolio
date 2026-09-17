@@ -23,9 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
-# AI System Cache
+# AI System Cache & Runtime
 .ai/cache/
 .ai/local/
+.ai/runtime/
 
 # Test reports & artifacts
 test-results/

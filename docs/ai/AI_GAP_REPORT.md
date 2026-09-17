@@ -9,11 +9,18 @@
 * **Missing Documentation**: None (All 19 AI docs present)
 * **Documentation Drift Status**: HEALTHY — All core knowledge documents verified
 
-## 2. CODEBASE TODO / FIXME AUDIT (13 Detected)
+## 2. CODEBASE TODO / FIXME AUDIT (22 Detected)
 
 | Severity | Type | File Location | Snippet / Context |
 | :--- | :--- | :--- | :--- |
-| INFO | HACK | `package-lock.json:2727` | `"url": "https://github.com/sponsors/colinhacks"` |
+| INFO | TEMP | `lighthouserc.json:21` | `"target": "temporary-public-storage"` |
+| INFO | HACK | `package-lock.json:2569` | `"url": "https://github.com/sponsors/colinhacks"` |
+| INFO | XXX | `package-lock.json:6054` | `"integrity": "sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==",` |
+| INFO | XXX | `package-lock.json:6284` | `"integrity": "sha512-e0VyvkVTwVYViNovRkZ9aodhxVlyoMn7eJhVUPxZ+eK9P/7CBkxvvsBOHqFPEH416726W8tLXXXjKwqgTErrCQ==",` |
+| INFO | XXX | `package-lock.json:6432` | `"integrity": "sha512-+O9Jct8wf++lXxxFc4hc8LsjaSq0HFzzL7cVsw8pRDIPdjKD2mT4ytDZlLuSBZ4cLKZFXIrMGO7DbQCtMJJMKw==",` |
+| INFO | HACK | `package-lock.json:7815` | `"url": "https://github.com/sponsors/colinhacks"` |
+| INFO | XXX | `src/3d/shaders/noise.ts:15` | `vec3 x0 = v - i + dot(i, C.xxx);` |
+| INFO | XXX | `src/3d/shaders/noise.ts:22` | `vec3 x1 = x0 - i1 + C.xxx;` |
 | INFO | PLACEHOLDER | `src/components/about/PortraitModule.tsx:25` | `{/* Central Portrait Placeholder Avatar with Glowing Ring */}` |
 | INFO | PLACEHOLDER | `src/components/contact/ContactSection.tsx:102` | `placeholder="Ankit Kumar"` |
 | INFO | PLACEHOLDER | `src/components/contact/ContactSection.tsx:105` | `className="w-full p-4 rounded-xl bg-[#030407] border border-[rgba(255,255,255,0.08)] text-sm text-[#F8FAFC] placeholder-[#475569] focus:border-[#78AFFF] focus:outline-none transition-colors"` |
@@ -24,8 +31,10 @@
 | INFO | TEMP | `src/components/insight/AiVsEngineering.tsx:9` | `attempt: usize,` |
 | INFO | TEMP | `src/components/insight/AiVsEngineering.tsx:17` | `Err(schema_err) if attempt < MAX_RETRY_COUNT => {` |
 | INFO | TEMP | `src/components/insight/AiVsEngineering.tsx:21` | `execute_agent_step(&repaired_completion, attempt + 1).await` |
-| INFO | PLACEHOLDER | `src/components/ui/CommandPalette.tsx:91` | `placeholder="Type a command or search..."` |
-| INFO | PLACEHOLDER | `src/components/ui/CommandPalette.tsx:94` | `className="w-full py-4 bg-transparent text-sm text-[#F5F7FA] placeholder-[#596170] focus:outline-none"` |
+| INFO | PLACEHOLDER | `src/components/ui/CommandPalette.test.tsx:15` | `expect(screen.getByPlaceholderText(/Type a command or search/i)).toBeInTheDocument();` |
+| INFO | PLACEHOLDER | `src/components/ui/CommandPalette.test.tsx:28` | `const input = screen.getByPlaceholderText(/Type a command or search/i);` |
+| INFO | PLACEHOLDER | `src/components/ui/CommandPalette.tsx:83` | `placeholder="Type a command or search..."` |
+| INFO | PLACEHOLDER | `src/components/ui/CommandPalette.tsx:86` | `className="w-full py-4 bg-transparent text-sm text-[#F8FAFC] placeholder-[#475569] focus:outline-none"` |
 
 ## 3. RECOMMENDED IMPROVEMENTS
 1. **[RECOMMENDED]** E2E Route smoke test for WebGL fallback verification.

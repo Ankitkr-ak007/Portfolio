@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+# Event-driven AI memory pre-push validation
+node scripts/ai/git-event.mjs pre-push
