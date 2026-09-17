@@ -69,7 +69,12 @@ export const Terminal: React.FC<TerminalProps> = ({ isOpen, onClose }) => {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Interactive Terminal">
+      <div
+        className="fixed inset-0 z-50 h-[100dvh] w-full overflow-hidden flex items-center justify-center p-4"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Interactive Terminal"
+      >
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -79,12 +84,12 @@ export const Terminal: React.FC<TerminalProps> = ({ isOpen, onClose }) => {
           className="fixed inset-0 bg-[#050609]/85 backdrop-blur-md"
         />
 
-        {/* Terminal Window */}
+        {/* Dedicated Terminal Scroll Container */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="relative w-full max-w-2xl bg-[#0A0D12] border border-[rgba(120,175,255,0.3)] rounded-xl shadow-[0_0_60px_rgba(0,0,0,0.9)] z-10 overflow-hidden font-mono"
+          className="relative w-full max-w-2xl bg-[#0A0D12] border border-[rgba(120,175,255,0.3)] rounded-xl shadow-[0_0_60px_rgba(0,0,0,0.95)] z-10 overflow-hidden font-mono"
         >
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 bg-[#10141B] border-b border-[rgba(255,255,255,0.08)]">
@@ -97,8 +102,13 @@ export const Terminal: React.FC<TerminalProps> = ({ isOpen, onClose }) => {
             </button>
           </div>
 
-          {/* Terminal History */}
-          <div className="p-4 max-h-80 overflow-y-auto space-y-3 text-xs">
+          {/* Terminal Independent Scrollable Content Area */}
+          <div
+            data-lenis-prevent="true"
+            data-lenis-prevent-touch="true"
+            onWheel={(e) => e.stopPropagation()}
+            className="p-4 max-h-[min(70dvh,540px)] overflow-y-auto overscroll-contain space-y-3 text-xs font-mono"
+          >
             <div className="text-[#596170]">
               KALKI VISION TERMINAL // VERSION 2026.1 <br />
               Type <span className="text-[#78AFFF]">help</span> to list commands or <span className="text-[#78AFFF]">exit</span> to close.

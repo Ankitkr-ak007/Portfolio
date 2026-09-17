@@ -71,7 +71,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-[#050609]/80 backdrop-blur-md"
+          className="fixed inset-0 bg-[#050609]/85 backdrop-blur-md"
         />
 
         {/* Modal Window */}
@@ -79,9 +79,9 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           initial={{ opacity: 0, scale: 0.95, y: -10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: -10 }}
-          className="relative w-full max-w-xl bg-[#0A0D12] border border-[rgba(120,175,255,0.2)] rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.9)] z-10 overflow-hidden font-mono"
+          className="relative w-full max-w-xl bg-[#0A0D12] border border-[rgba(120,175,255,0.2)] rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.95)] z-10 overflow-hidden font-mono"
         >
-          {/* Search Input Bar */}
+          {/* Search Input Bar (Fixed) */}
           <div className="flex items-center px-4 border-b border-[rgba(255,255,255,0.08)]">
             <Command className="w-4 h-4 text-[#78AFFF] mr-3 shrink-0" />
             <input
@@ -98,8 +98,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             </button>
           </div>
 
-          {/* Command List */}
-          <div className="max-h-72 overflow-y-auto p-2 space-y-1">
+          {/* Dedicated Command Results Scroll Container */}
+          <div
+            data-lenis-prevent="true"
+            data-lenis-prevent-touch="true"
+            onWheel={(e) => e.stopPropagation()}
+            className="max-h-[min(60dvh,480px)] overflow-y-auto overscroll-contain p-2 space-y-1 font-mono"
+          >
             {filteredCommands.length > 0 ? (
               filteredCommands.map((cmd, i) => (
                 <button
