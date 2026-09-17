@@ -27,7 +27,7 @@
 | `docs/ai/DESIGN_SYSTEM.md` | Doc | 1259 | Critical | Project Intelligence Context Memory |
 | `docs/ai/ENGINEERING_RULES.md` | Doc | 861 | Critical | Project Intelligence Context Memory |
 | `docs/ai/ENVIRONMENT.md` | Doc | 507 | Critical | Project Intelligence Context Memory |
-| `docs/ai/FILE_MAP.md` | Doc | 8899 | Critical | Project Intelligence Context Memory |
+| `docs/ai/FILE_MAP.md` | Doc | 8977 | Critical | Project Intelligence Context Memory |
 | `docs/ai/GIT_HISTORY.md` | Doc | 1605 | Critical | Project Intelligence Context Memory |
 | `docs/ai/KNOWN_ISSUES.md` | Doc | 922 | Critical | Project Intelligence Context Memory |
 | `docs/ai/PERFORMANCE.md` | Doc | 674 | Critical | Project Intelligence Context Memory |
