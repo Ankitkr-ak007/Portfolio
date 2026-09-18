@@ -203,9 +203,9 @@ npm run ai:health         # Validates Git == Runtime == Git Note invariant
 
 ## 📬 Contact & Channels
 
-- **Email**: [ankit.kr.dev@gmail.com](mailto:ankit.kr.dev@gmail.com)
+- **Email**: [ankitkr.ak007@gmail.com](mailto:ankitkr.ak007@gmail.com)
 - **GitHub**: [github.com/Ankitkr-ak007](https://github.com/Ankitkr-ak007)
-- **LinkedIn**: [linkedin.com/in/ankit-kumar-dev](https://www.linkedin.com/in/ankit-kumar-dev)
+- **LinkedIn**: [linkedin.com/in/dev-ankit29](https://www.linkedin.com/in/dev-ankit29)
 
 ---
 
